@@ -137,6 +137,44 @@ class Truck
 }
 
 
+class PreCheckQuestion {
+  String question;
+  String option1;
+  String option2;
+  String answer;
+  String myanswer;
+
+  PreCheckQuestion({this.question,this.option1,this.option2,this.answer,this.myanswer});
+  factory PreCheckQuestion.fromJson(Map<String, dynamic> parsedJson) {
+    return PreCheckQuestion(
+        question: parsedJson["question"] as String,
+        option1: parsedJson["option_1"] as String,
+        option2: parsedJson["option_2"] as String,
+        answer: parsedJson["answer"] as String,
+        myanswer:null
+    );
+  }
+}
+
+class TrailerQuestion {
+  String question;
+  String option1;
+  String option2;
+  String answer;
+  String myanswer;
+
+  TrailerQuestion({this.question,this.option1,this.option2,this.answer,this.myanswer});
+  factory TrailerQuestion.fromJson(Map<String, dynamic> parsedJson) {
+    return TrailerQuestion(
+        question: parsedJson["question"] as String,
+        option1: parsedJson["option_1"] as String,
+        option2: parsedJson["option_2"] as String,
+        answer: parsedJson["answer"] as String,
+        myanswer:null
+    );
+  }
+}
+
 
 
 

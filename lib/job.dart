@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:all_road/MyColors.dart';
+import 'package:all_road/precheck.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -23,11 +24,13 @@ class JobState extends State<Job> {
   JobState(this.data);
 
   List<Truck> truck_items = [];
+  List<String> trailer1_items=[];
   List<String> banners = [];
   String cat_name;
   int _current = 0;
   int item_cnt = 0;
   Truck selected_truck;
+  String selected_trailer;
 
   @override
   void initState() {
@@ -144,6 +147,10 @@ class JobState extends State<Job> {
                     onChanged: (Truck Value) {
                       setState(() {
                         selected_truck = Value;
+                        if(selected_truck.truck_cat =="1")
+                          {
+                            _getTrailer("act=GET_TRAILER");
+                          }
                       });
                     },
                     items: truck_items.map((Truck truck) {
@@ -161,7 +168,47 @@ class JobState extends State<Job> {
                     }).toList(),
                   ),
                 ),
+                Visibility(
+                  visible: selected_truck==null? false:selected_truck.truck_cat=="1" ? true:false,
+                //  maintainAnimation: true,
+                  child: Padding(
+                    padding:
+                    EdgeInsets.symmetric(horizontal: 100,vertical: 16),
+                    child: DropdownButtonFormField<String>(
 
+                      decoration:InputDecoration(
+                        isDense: true,
+                        labelText: "Trailer",
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xff009933))),
+
+                      ),
+
+
+                      validator: (value) =>
+                      value == null ? "Please Select Trailer" : null,
+                      value: selected_trailer,
+                      onChanged: (String Value) {
+                        setState(() {
+                          selected_trailer = Value;
+                        });
+                      },
+                      items: trailer1_items.map((String trailer) {
+                        return DropdownMenuItem<String>(
+                          value: trailer,
+                          child: Row(
+                            children: <Widget>[
+                              Text(
+                               trailer,
+                                style: TextStyle(color: Colors.black),
+                              ),
+                            ],
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ),
                 Container(
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                     color: Colors.white,
@@ -171,8 +218,11 @@ class JobState extends State<Job> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(50.0),
                           )),
-                      onPressed: () {},
-                      child: Text('Submit Test',
+                      onPressed: () {
+
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => Precheck()));
+                      },
+                      child: Text('Pre Check',
                           style: TextStyle(color: Colors.white, fontSize: 16)),
                     ))
               ],
@@ -198,6 +248,19 @@ class JobState extends State<Job> {
       setState(() {
         Iterable list = response_data["data"];
         truck_items = list.map((model) => Truck.fromJson(model)).toList();
+      });
+    }
+  }
+
+  _getTrailer(String url) async {
+    final response = await API.getData(url);
+
+    //debugger();
+    var response_data = json.decode(response.body);
+    if (this.mounted) {
+      setState(() {
+        Iterable list = response_data["data"];
+        trailer1_items = list.map((model) => Truck.fromJson(model).rego).toList();
       });
     }
   }
