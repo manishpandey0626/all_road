@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 const baseUrl = "https://websnt.xyz/all_road/api/index.php?";
 const imageUrl="https://websnt.xyz/all_road/productsImages/";
 
@@ -11,7 +12,7 @@ class API {
 
   static Future postData(Map<String, dynamic> data) {
     return http.post(
-        baseUrl,
+        Uri.parse(baseUrl),
       body:data
   );
   }
@@ -25,11 +26,17 @@ class API {
     return respStr;
   }
 
-  static Future saveBusiness(Map<String, String> data,String logo,String brochure) async {
+  static Future saveBusiness(Map<String, String> data,List<String> paths) async {
     var request = http.MultipartRequest('POST', Uri.parse(baseUrl));
     request.fields.addAll(data);
-    request.files.add(await http.MultipartFile.fromPath('logo', logo));
-    request.files.add(await http.MultipartFile.fromPath('brochure', brochure));
+    int i=1;
+    for(String path in paths) {
+      request.files.add(await http.MultipartFile.fromPath('file$i',path));
+      i++;
+    }
+   // request.files.add(await http.MultipartFile.fromPath('brochure', brochure));
+
+
     var res = await request.send();
     final respStr = await res.stream.bytesToString();
     return respStr;
@@ -37,14 +44,14 @@ class API {
 
   static Future login(Map<String, dynamic> data) {
     return http.post(
-        baseUrl,
+        Uri.parse(baseUrl),
         body:data
     );
   }
 
   static Future getData(String end_url) {
     var url = baseUrl + end_url;
-    return http.get(url);
+    return http.get(Uri.parse(url));
   }
 
 }

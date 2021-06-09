@@ -145,15 +145,25 @@ class PreCheckQuestion {
   String myanswer;
 
   PreCheckQuestion({this.question,this.option1,this.option2,this.answer,this.myanswer});
-  factory PreCheckQuestion.fromJson(Map<String, dynamic> parsedJson) {
+  factory PreCheckQuestion.fromJson(Map<String, dynamic> parsedJson,{status=false}) {
     return PreCheckQuestion(
         question: parsedJson["question"] as String,
         option1: parsedJson["option_1"] as String,
         option2: parsedJson["option_2"] as String,
         answer: parsedJson["answer"] as String,
-        myanswer:null
+        myanswer: status? parsedJson["answer"] : null
     );
   }
+
+
+  Map<String, dynamic> toJson() => {
+    "question": question,
+    "option1": option1,
+    "option2": option2,
+    "answer": answer,
+    "myanswer":myanswer,
+
+  };
 }
 
 class TrailerQuestion {
@@ -164,15 +174,49 @@ class TrailerQuestion {
   String myanswer;
 
   TrailerQuestion({this.question,this.option1,this.option2,this.answer,this.myanswer});
-  factory TrailerQuestion.fromJson(Map<String, dynamic> parsedJson) {
+  factory TrailerQuestion.fromJson(Map<String, dynamic> parsedJson,{status=false}) {
     return TrailerQuestion(
         question: parsedJson["question"] as String,
         option1: parsedJson["option_1"] as String,
         option2: parsedJson["option_2"] as String,
         answer: parsedJson["answer"] as String,
-        myanswer:null
+        myanswer: status? parsedJson["answer"] : null
     );
   }
+
+  Map<String, dynamic> toJson() => {
+    "question": question,
+    "option1": option1,
+    "option2": option2,
+    "answer": answer,
+    "myanswer":myanswer,
+
+  };
+}
+
+class JobDetailData
+{
+  String job_id;
+  String start_time;
+  String start_km;
+  String worksite;
+  String loads_done;
+  String loads_comment;
+  String status;
+
+  JobDetailData({this.job_id,this.start_time,this.start_km,this.worksite,this.loads_done,this.loads_comment,this.status});
+  factory JobDetailData.fromJson(Map<String, dynamic> parsedJson) {
+    return JobDetailData(
+      start_time : parsedJson["shift_start_time"] as String,
+      start_km : parsedJson["start_km"] as String,
+      worksite : parsedJson["worksite"] as String,
+      loads_done : parsedJson["loads_done"] as String,
+      loads_comment : parsedJson["loads_comment"] as String,
+      job_id : parsedJson["id"] as String,
+      status:parsedJson["type_status"] as String
+    );
+  }
+
 }
 
 

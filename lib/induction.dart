@@ -3,6 +3,7 @@ import 'package:all_road/video.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import 'JobDetail.dart';
 import 'audio.dart';
 import 'driver_manual.dart';
 import 'driver_test.dart';
@@ -312,8 +313,7 @@ class InductionState extends State<Induction> {
                             borderRadius: BorderRadius.circular(50.0),
                           )),
                       onPressed: () {
-                        //Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => DriverTest()));
-                        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => Job()));
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => DriverTest()));
                       },
                       child: Text('Start Test',
                           style: TextStyle(color: Colors.white, fontSize: 16)),

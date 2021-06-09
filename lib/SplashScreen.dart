@@ -1,7 +1,11 @@
 import 'dart:async';
+import 'dart:developer';
+import 'package:all_road/induction.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'driver_manual.dart';
+import 'job.dart';
 import 'login.dart';
 
 
@@ -32,12 +36,27 @@ class _SplashScreenState extends State<SplashScreen> {
     return Timer(_duration, navigationPage);
   }
 
-  void navigationPage() {
-    Map<String, dynamic> data =
-    Map<String, dynamic>();
-    data['cat_id'] = "1";
-    data['cat_name']="test";
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => Login()));
+  void navigationPage() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+ // debugger();
+    var status = prefs.getBool('isLoggedIn') ?? false;
+    if(status)
+      {
+        var testStatus = prefs.getString("testStatus") ?? "N";
+        if("Y"==testStatus) {
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (BuildContext context) => Job()));
+        }
+        else
+          {
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (BuildContext context) => Induction()));
+          }
+      }
+    else {
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (BuildContext context) => Login()));
+    }
   }
 
   @override

@@ -1,9 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import 'SessionManager.dart';
+import 'api.dart';
 import 'driver_manual.dart';
 import 'induction.dart';
+import 'job.dart';
 
 class Login extends StatefulWidget {
   Login({Key key, this.title}) : super(key: key);
@@ -26,6 +31,9 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   int _counter = 0;
   final  _formKey = GlobalKey<FormState>();
+
+  var email= TextEditingController();
+  var password= TextEditingController();
   void _incrementCounter() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
@@ -87,10 +95,17 @@ class _LoginState extends State<Login> {
                   height: 20,
                 ),
                 Container(
+
                   alignment: Alignment.center,
                   width: size.width - 60,
-                  height: 320,
+
+                    constraints: BoxConstraints(
+                      minHeight: 360
+                    ),
+
+                 // height: 320,
                   child: Card(
+
                     color: Color(0xffe1e1e1),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15.0),
@@ -107,10 +122,10 @@ class _LoginState extends State<Login> {
                           )),
                       SizedBox(height: 10,),
                       _getInputText(
-                          null, "E-Mail Address", "E-Mail Address", "Invalid mail id"),
-                     _getInputText(null, "Password", "Password", "Invalid Password Id",obscureText: true),
+                          email, "E-Mail Address", "E-Mail Address", "Invalid mail id"),
+                     _getInputText(password, "Password", "Password", "Invalid Password Id",obscureText: true),
                       Padding(
-                        padding: EdgeInsets.only(top: 50.0),
+                        padding: EdgeInsets.only(top: 60.0,bottom:20),
                         child: Container(
                             child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
@@ -123,12 +138,7 @@ class _LoginState extends State<Login> {
                             // the form is invalid.
                             if (_formKey.currentState.validate()) {
 
-                              Map<String, dynamic> data =
-                              Map<String, dynamic>();
-                              data['cat_id'] = "1";
-                              data['cat_name']="test";
-                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => Induction()));
-                              //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Home()));
+                            _login();
                             }
                           },
                           child: Text('Login',
@@ -168,11 +178,56 @@ class _LoginState extends State<Login> {
 
           ),
           validator: (value) {
-         /*   if (value.isEmpty) {
+            if (value.isEmpty) {
               return msg;
-            }*/
+            }
             return null;
           },
         ));
+  }
+
+
+
+  _login() async {
+
+  //  Dialogs.showLoadingDialog(context, _keyLoader);
+Map<String,dynamic> data = Map<String,dynamic>();
+data['act']="LOGIN";
+data['email']=email.text;
+data['password']=password.text;
+    var response = await API.login(data);
+
+
+    var response_data= json.decode(response.body);
+
+//debugger();
+   // Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
+    bool flag=response_data["status"];
+    if(flag)
+    {
+      var data=response_data["data"];
+      var testStatus=data["result"];
+      SessionManager.createSession(data["id"] ,data["first_name"],testStatus);
+      if("Y"==testStatus) {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => Job()));
+      }
+      else
+        {
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => Induction()));
+        }
+    }
+    else
+    {
+      String error= response_data["msg"];
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content:  Text("Error: $error"),
+        duration: const Duration(seconds: 3),
+
+      ));
+
+    }
+
   }
 }

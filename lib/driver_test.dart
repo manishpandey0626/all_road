@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:all_road/MyColors.dart';
@@ -8,9 +9,11 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'DataClasses.dart';
+import 'SessionManager.dart';
 import 'api.dart';
 import 'induction.dart';
 import 'job.dart';
@@ -261,61 +264,7 @@ class DriverTestState extends State<DriverTest> {
                                   ),
                                 ],))
 
-                              /*
-                      Container(
-                        width: 100,
-                        child: Row(
-                          children: [
-                            Radio(
 
-                              value: items[index].option2,
-
-                              groupValue: items[index].myanswer,
-                              onChanged: (val) {
-                                setState(() {
-                                  items[index].myanswer=val;
-                                });
-                              }),
-
-                        Text(items[index].option2)
-                           ]),
-                      ) ]),
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Row(
-                                  children: [
-                                    Radio(
-                                        value: items[index].option3,
-
-                                        groupValue: items[index].myanswer,
-                                        onChanged: (val) {
-                                          setState(() {
-                                            items[index].myanswer=val;
-                                          });
-                                        }),
-                                    Text(items[index].option3),
-
-                                  ],
-                                ),
-                                Row(
-                                    children: [
-
-                                      Radio(
-                                          value: items[index].option4,
-
-                                          groupValue: items[index].myanswer,
-                                          onChanged: (val) {
-                                            setState(() {
-                                              items[index].myanswer=val;
-                                            });
-                                          }),
-                                      Text(items[index].option4)
-                                    ]) ]),
-
-                        ]),
-                    // constraints: BoxConstraints(minWidth: double.infinity),
-                  ),*/
                             ]),
                       )));
             }, childCount: items.length),
@@ -346,12 +295,7 @@ class DriverTestState extends State<DriverTest> {
                    }
                  else
                    {
-                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                       content: const Text('You Passed the test.'),
-                       duration: const Duration(seconds: 5),
-
-                     ));
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => Job()));
+                   _updateTestStatus();
                    }
 
                   },
@@ -383,5 +327,28 @@ class DriverTestState extends State<DriverTest> {
     }
   }
 
+_updateTestStatus() async
+{
+  Map<String,dynamic> user_data= await SessionManager.getUserDetails();
+  String driver_id= user_data[SessionManager.driverId];
+  Map<String, dynamic> data = new Map<String, dynamic>();
+  data['act'] = "UPDATE_TEST_STATUS";
+  data['driver_id'] = driver_id;
+  data['status'] = "Y";
 
+  var response = await API.postData(data);
+
+  var resp = json.decode(response.body);
+  if (resp["status"]) {
+
+    SessionManager.updateTestStatus("Y");
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: const Text('You Passed the test.'),
+      duration: const Duration(seconds: 5),
+
+    ));
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (BuildContext context) => Job()));
+  }
+}
 }

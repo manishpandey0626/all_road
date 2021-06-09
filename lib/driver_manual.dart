@@ -201,7 +201,7 @@ class DriverManualState extends State<DriverManual> {
                                 color: Theme.of(context).primaryColor,
                               ),
                             ),
-                            IconButton(
+                            /*IconButton(
                               onPressed: () {
                                 requestDownload(items[index].file_name);
                               },
@@ -212,7 +212,7 @@ class DriverManualState extends State<DriverManual> {
                                 alignment: Alignment.center,
                                 color: Theme.of(context).primaryColor,
                               ),
-                            ),
+                            ),*/
                           ])
                       ,Divider()],
                     ),
