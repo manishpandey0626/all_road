@@ -2,6 +2,7 @@ import 'package:all_road/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'Dashboard.dart';
 import 'SplashScreen.dart';
 
 
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme:  basicTheme(),
       home: SplashScreen(),
+     // home: Dashboard(),
     );
   }
 }

@@ -26,9 +26,9 @@ ThemeData basicTheme() {
             fontWeight: FontWeight.w400
         ),
         headline4: base.headline4.copyWith(
-            color:Colors.black,
+            color:Color(0xFF77ba1c),
             fontFamily: 'Quicksand',
-            fontSize: 14,
+            fontSize: 16,
             fontWeight: FontWeight.w700
         ),
         headline5: base.headline5.copyWith(

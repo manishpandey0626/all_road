@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import 'Dashboard.dart';
+import 'JobDetail.dart';
 import 'SessionManager.dart';
 import 'api.dart';
 import 'driver_manual.dart';
@@ -100,7 +102,7 @@ class _LoginState extends State<Login> {
                   width: size.width - 60,
 
                     constraints: BoxConstraints(
-                      minHeight: 360
+                      minHeight: size.height*0.6
                     ),
 
                  // height: 320,
@@ -209,8 +211,7 @@ data['password']=password.text;
       var testStatus=data["result"];
       SessionManager.createSession(data["id"] ,data["first_name"],testStatus);
       if("Y"==testStatus) {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => Job()));
+        _getJobStatus();
       }
       else
         {
@@ -229,5 +230,31 @@ data['password']=password.text;
 
     }
 
+  }
+
+
+  _getJobStatus() async
+  {
+    Map<String,dynamic> user_data= await SessionManager.getUserDetails();
+    String driver_id= user_data[SessionManager.driverId];
+
+    Map<String, dynamic> data = new Map<String, dynamic>();
+    data['act'] = "GET_JOB_STATUS";
+    data['driver_id'] =driver_id;
+
+    var response = await API.postData(data);
+    //debugger();
+    var resp = json.decode(response.body);
+    if (resp["status"]) {
+      Map<String, dynamic> data = Map<String, dynamic>();
+      data['job_id'] = resp["job_id"];
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => JobDetail(data:data)));
+    }
+    else
+    {
+
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (BuildContext context) => Dashboard()));
+    }
   }
 }

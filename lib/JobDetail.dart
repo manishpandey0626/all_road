@@ -6,9 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:convert';
+import 'Break.dart';
+import 'BreakDown.dart';
 import 'DataClasses.dart';
+import 'FuelLog.dart';
+import 'IncidentLog.dart';
 import 'SessionManager.dart';
+import 'WorksheetAttachment.dart';
 import 'api.dart';
+import 'job.dart';
 
 class JobDetail extends StatefulWidget {
   Map<String, dynamic> data = Map<String, dynamic>();
@@ -25,13 +31,15 @@ class JobDetailState extends State<JobDetail> {
   var shiftEndTime = TextEditingController();
   var startKM = TextEditingController();
   var endKM = TextEditingController();
-  var worksite = TextEditingController();
   var loadsDone = TextEditingController();
   var loadsComment = TextEditingController();
   bool job_started=false;
   String job_id;
 
   JobDetailData jobDetailData;
+
+  Worksite selected_worksite;
+  List<Worksite> worksites=[];
 
   JobDetailState(this.data);
 
@@ -47,6 +55,8 @@ class JobDetailState extends State<JobDetail> {
     job_id = data['job_id'];
 
     _getJobDetail();
+    _getBreakStatus();
+    _getWorksite();
   }
 
   ScrollController _scrollController;
@@ -140,7 +150,7 @@ class JobDetailState extends State<JobDetail> {
           SliverToBoxAdapter(
               child: Container(
                   color: Colors.white,
-                  padding: EdgeInsets.all(20),
+                  padding: EdgeInsets.fromLTRB(20,0,20,20),
                   child: Container(
                       padding:
                       EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -189,8 +199,44 @@ class JobDetailState extends State<JobDetail> {
                                           is_numeric: true,is_enable: !job_started))),
                             ],
                           ),
-                          _getInputText(worksite, "Worksite", "Worksite",
-                              "",is_enable: !job_started),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            child: DropdownButtonFormField<Worksite>(
+
+                              decoration:InputDecoration(
+
+                                isDense: true,
+                                labelText: "Worksite",
+                                focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(color: Color(0xff009933))),
+
+                              ),
+
+
+                              validator: (value) =>
+                              value == null ? "Please Select Truck." : null,
+                              value: selected_worksite,
+                              onChanged:job_started? null:(Worksite Value) {
+                                setState(() {
+                                  selected_worksite = Value;
+
+                                });
+                              },
+                              items: worksites.map((Worksite worksite) {
+                                return DropdownMenuItem<Worksite>(
+                                  value: worksite,
+                                  child: Row(
+                                    children: <Widget>[
+                                      Text(
+                                        worksite.name,
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                          ),
                           _getInputText(loadsDone, "Loads Done", "Loads Done", "",is_enable: !job_started),
                           _getInputText(loadsComment, "Loads Comment", "Loads Comment", "",is_enable:!job_started),
                           Visibility(
@@ -235,40 +281,185 @@ class JobDetailState extends State<JobDetail> {
 
                         ],
                       )))),
+          SliverToBoxAdapter(
+            child: Container(
+              color:Colors.white,
+              child: Padding(
+                padding:EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+                child: Column(
+
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    GestureDetector(
+                      onTap: ()
+                      {
+                        Map<String,dynamic> data= Map<String,dynamic>();
+                        data['rego']=jobDetailData.rego;
+                        data['truck_id']=jobDetailData.truck_id;
+                        data['job_id']=jobDetailData.job_id;
+                        data['ids']=selected_worksite.document;
+                        data['trailer1_id']=jobDetailData.trailer1_id;
+                        data['trailer2_id']=jobDetailData.trailer2_id;
+                        Navigator.push(context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) => WorksheetAttachment(data:data)));
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(bottom: 10),
+                        alignment: Alignment.center,
+                        padding:
+                        EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                        decoration: BoxDecoration(
+                          color: MyColors.greyBackground,
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                        ),
+                        child:Text("Worksheet Attachment",style: Theme.of(context).textTheme.headline4,),
+                      ),
+                    ),
+                GestureDetector(
+                  onTap: ()
+                  {
+                    Map<String,dynamic> data= Map<String,dynamic>();
+                    data['rego']=jobDetailData.rego;
+                    data['truck_id']=jobDetailData.truck_id;
+                    data['job_id']=jobDetailData.job_id;
+                    Navigator.push(context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => FuelLog(data:data)));
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(bottom: 10),
+                    alignment: Alignment.center,
+                  padding:
+                  EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  decoration: BoxDecoration(
+                    color: MyColors.greyBackground,
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                  ),
+                  child:Text("Fuel Log",style: Theme.of(context).textTheme.headline4,),
+                  ),
+                ),
+
+                    GestureDetector(
+                      onTap: ()
+                      {
+                        Map<String,dynamic> data= Map<String,dynamic>();
+                        data['rego']=jobDetailData.rego;
+                        data['truck_id']=jobDetailData.truck_id;
+                        data['job_id']=jobDetailData.job_id;
+                        Navigator.push(context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) => IncidentLog(data:data)));
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(bottom: 10),
+                        alignment: Alignment.center,
+                        padding:
+                        EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                        decoration: BoxDecoration(
+                          color: MyColors.greyBackground,
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                        ),
+                        child:Text("Incident Log",style: Theme.of(context).textTheme.headline4,),
+                      ),
+                    ),
+                   Row(
+                     mainAxisAlignment: MainAxisAlignment.spaceAround,
+                     children: [
+                       Flexible(
+                         child: GestureDetector(
+                           onTap: ()
+                           {
+                             _callBreak();
+                           },
+                           child: Container(
+                             margin: EdgeInsets.only(bottom: 10),
+                             alignment: Alignment.center,
+                             padding:
+                             EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                             decoration: BoxDecoration(
+                               color: MyColors.greyBackground,
+                               borderRadius: BorderRadius.all(Radius.circular(8)),
+                             ),
+                             child:Text("Break",style: Theme.of(context).textTheme.headline4,),
+                           ),
+                         ),
+                       ),
+                       SizedBox(width:20),
+                       Flexible(
+                         child: GestureDetector(
+                           onTap: ()
+                           {
+                             Map<String,dynamic> data= Map<String,dynamic>();
+                             data['rego']=jobDetailData.rego;
+                             data['truck_id']=jobDetailData.truck_id;
+                             data['job_id']=jobDetailData.job_id;
+                             Navigator.push(context,
+                                 MaterialPageRoute(
+                                     builder: (BuildContext context) => BreakDown(data:data)));
+                           },
+                           child: Container(
+                             margin: EdgeInsets.only(bottom: 10),
+                             alignment: Alignment.center,
+                             padding:
+                             EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                             decoration: BoxDecoration(
+                               color: MyColors.greyBackground,
+                               borderRadius: BorderRadius.all(Radius.circular(8)),
+                             ),
+                             child:Text("Break Down",style: Theme.of(context).textTheme.headline4,),
+                           ),
+                         ),
+                       ),
+                     ],
+                   )
+                  ],
+                ),
+              ),
+            ),
+          ),
           SliverFillRemaining(
             hasScrollBody: false,
             child: Container(
               color: Colors.white,
               child:
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(20),
+                Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Visibility(
+                        visible: !job_started,
+                        child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                           padding: EdgeInsets.fromLTRB(50, 15, 50, 15),
+                            shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50.0),
+                        )),
+                        onPressed: () {
+                          _startJob();
+                        },
+                        child: Text('Start Job',
+                            style: TextStyle(color: Colors.white, fontSize: 16)),
+                        ),
+                      ),
+                    Visibility(
+                      visible: job_started,
                       child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        //  padding: EdgeInsets.fromLTRB(50, 15, 50, 15),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(50.0),
-                          )),
-                      onPressed: () {
-                        _startJob();
-                      },
-                      child: Text('Start Job',
-                          style: TextStyle(color: Colors.white, fontSize: 16)),
+                        style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.fromLTRB(50, 15, 50, 15),
+                            shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50.0),
+                        )),
+                        onPressed: () {
+                          _endJob();
+                        },
+                        child: Text('Submit',
+                            style: TextStyle(color: Colors.white, fontSize: 16)),
+                      ),
+                    )
+                  ],
                   ),
-                    ), ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        //  padding: EdgeInsets.fromLTRB(50, 15, 50, 15),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(50.0),
-                          )),
-                      onPressed: () {
-                        _startJob();
-                      },
-                      child: Text('Submit',
-                          style: TextStyle(color: Colors.white, fontSize: 16)),
-                    )],
                 ),
 
             ),
@@ -341,7 +532,7 @@ class JobDetailState extends State<JobDetail> {
 setState(() {
   shiftStartTime.text=jobDetailData.start_time;
   startKM.text=jobDetailData.start_km;
-  worksite.text=jobDetailData.worksite;
+ // selected_worksite=jobDetailData.worksite;
   loadsDone.text=jobDetailData.loads_done;
   loadsComment.text=jobDetailData.loads_comment;
   if("S"==jobDetailData.status)
@@ -350,6 +541,8 @@ setState(() {
     }
 
 });
+
+
     }
 
 
@@ -360,7 +553,7 @@ setState(() {
     job_data['job_id'] = job_id;
     job_data['start_time'] = shiftStartTime.text;
     job_data['start_km'] = startKM.text;
-    job_data['worksite'] = worksite.text;
+    job_data['worksite'] = selected_worksite.id;
     job_data['loads_done'] = loadsDone.text;
     job_data['loads_comment'] = loadsComment.text;
 
@@ -372,6 +565,7 @@ setState(() {
 
       setState(() {
         job_started=true;
+        _getJobDetail();
       });
 
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -389,4 +583,98 @@ setState(() {
   }
 
 
+  _endJob() async {
+    Map<String, dynamic> job_data = new Map<String, dynamic>();
+    job_data['act'] = "END_JOB";
+    job_data['job_id'] = job_id;
+    job_data['end_time'] = shiftEndTime.text;
+    job_data['end_km'] = endKM.text;
+
+
+    var response = await API.postData(job_data);
+    debugger();
+    print(response.body);
+    var resp = json.decode(response.body);
+    if (resp["status"]) {
+
+      setState(() {
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (BuildContext context) => Job()));
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Job End!!'),
+      ));
+    }
+    else
+    {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Error: ${resp["msg"]}'),
+        duration: const Duration(seconds: 5),
+
+      ));
+    }
+  }
+
+
+
+  _getWorksite() async {
+
+    Map<String,dynamic> data= Map<String,dynamic>();
+    data["act"]="GET_WORKSITE";
+    final response = await API.postData(data);
+
+    //debugger();
+    var response_data = json.decode(response.body);
+    if (this.mounted) {
+      setState(() {
+        Iterable list = response_data["data"];
+        //  debugger();
+        worksites = list.map((model) => Worksite.fromJson(model)).toList();
+        if(jobDetailData !=null) {
+          selected_worksite =worksites.singleWhere((element) => element.id==jobDetailData.worksite);
+        }
+      });
+    }
+  }
+
+
+
+  _getBreakStatus() async {
+    //debugger();
+    Map<String, dynamic> post_data = Map<String, dynamic>();
+    post_data["act"] = "BREAK_STATUS";
+    post_data["job_id"]=job_id;
+    final response = await API.postData(post_data);
+
+    //debugger();
+    var response_data = json.decode(response.body);
+
+    if (this.mounted) {
+      setState(() {
+        debugger();
+        bool break_expire=response_data['expire'];
+       String precheck_status=response_data['precheck_status'];
+
+       if(!break_expire || precheck_status=="N")
+         {
+           _callBreak();
+         }
+      });
+    }
+  }
+
+  _callBreak()
+  {
+
+    Map<String,dynamic> data= Map<String,dynamic>();
+    data['rego']=jobDetailData.rego;
+    data['truck_id']=jobDetailData.truck_id;
+    data['trailer1_id']=jobDetailData.trailer1_id;
+    data['trailer2_id']=jobDetailData.trailer2_id;
+    data['job_id']=jobDetailData.job_id;
+    Navigator.pushReplacement(context,
+        MaterialPageRoute(
+            builder: (BuildContext context) => Break(data:data)));
+  }
 }

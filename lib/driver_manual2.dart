@@ -12,19 +12,19 @@ import 'package:url_launcher/url_launcher.dart';
 import 'DataClasses.dart';
 import 'api.dart';
 
-class DriverManual extends StatefulWidget {
+class DriverManual2 extends StatefulWidget {
   Map<String, dynamic> data = Map<String, dynamic>();
 
-  DriverManual({Key key, this.data}) : super(key: key);
+  DriverManual2({Key key, this.data}) : super(key: key);
 
   @override
-  DriverManualState createState() => DriverManualState(data);
+  DriverManual2State createState() => DriverManual2State(data);
 }
 
-class DriverManualState extends State<DriverManual> {
+class DriverManual2State extends State<DriverManual2> {
   Map<String, dynamic> data = Map<String, dynamic>();
 
-  DriverManualState(this.data);
+  DriverManual2State(this.data);
 
   List<DriverManualData> items = [];
   List<String> banners = [];
@@ -42,7 +42,7 @@ class DriverManualState extends State<DriverManual> {
     );
 
     // cat_name = data["cat_name"];
-    _getDriverManuals("act=GET_DRIVER_MANUAL");
+    _getDriverManual2("act=GET_DRIVER_MANUAL2");
     /* _getBanners("act=GET_BANNER&cat_id=" + data["cat_id"]);*/
   }
 
@@ -92,48 +92,48 @@ class DriverManualState extends State<DriverManual> {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                SizedBox(
-                  height: 10,
-                ),
-                Stack(children: [
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: Padding(
-                      padding: EdgeInsets.only(right: 10),
-                      child: SvgPicture.asset(
-                        'asset/images/add_file_bro.svg',
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Stack(children: [
+                      Align(
                         alignment: Alignment.bottomRight,
-                        width: MediaQuery.of(context).size.width,
-                        height: 150,
+                        child: Padding(
+                          padding: EdgeInsets.only(right: 10),
+                          child: SvgPicture.asset(
+                            'asset/images/add_file_bro.svg',
+                            alignment: Alignment.bottomRight,
+                            width: MediaQuery.of(context).size.width,
+                            height: 150,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Enhance Your Skills",
-                              style: Theme.of(context).textTheme.headline2,
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Text(
-                              "Collect all types \ndocuments",
-                              style: Theme.of(context).textTheme.headline3,
-                            ),
-                          ]),
-                    ),
-                  )
-                ]),
-                SizedBox(
-                  height: 10,
-                )
-              ])),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Enhance Your Skills",
+                                  style: Theme.of(context).textTheme.headline2,
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Text(
+                                  "Collect all types \ndocuments",
+                                  style: Theme.of(context).textTheme.headline3,
+                                ),
+                              ]),
+                        ),
+                      )
+                    ]),
+                    SizedBox(
+                      height: 10,
+                    )
+                  ])),
           SliverToBoxAdapter(
               child: Container(
                 height: 20,
@@ -150,59 +150,59 @@ class DriverManualState extends State<DriverManual> {
             physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,*/
             delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
+                  (BuildContext context, int index) {
                 return GestureDetector(
                   onTap: () {},
                   child: Container(
                     decoration:  BoxDecoration(
-                            color: Colors.white,
-                     /*   border: Border(
+                      color: Colors.white,
+                      /*   border: Border(
                             top: BorderSide(
 
                                 color: Colors.grey.shade300, width: 0.5))*/
-                          ),
+                    ),
                     padding: index==0? EdgeInsets.fromLTRB(20, 20, 20, 0):EdgeInsets.fromLTRB(20, 0, 20, 0) ,
                     child: Column(
 
                       children: [
 
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SvgPicture.asset(
-                              'asset/images/pdf.svg',
-                              alignment: Alignment.center,
-                              width: 30,
-                              height: 30,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                            SizedBox(width: 10),
-                            Flexible(
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  items[index].name,
-                                  style: Theme.of(context).textTheme.bodyText1,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 16,
-                            ),
-                            IconButton(
-                              onPressed: () {
-
-                                _launchURL(items[index].file_name);
-                              },
-                              icon: SvgPicture.asset(
-                                'asset/images/feather_eye.svg',
-                                width: 16,
-                                height: 16,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SvgPicture.asset(
+                                'asset/images/pdf.svg',
                                 alignment: Alignment.center,
+                                width: 30,
+                                height: 30,
                                 color: Theme.of(context).primaryColor,
                               ),
-                            ),
-                            /*IconButton(
+                              SizedBox(width: 10),
+                              Flexible(
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    items[index].name,
+                                    style: Theme.of(context).textTheme.bodyText1,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 16,
+                              ),
+                              IconButton(
+                                onPressed: () {
+
+                                  _launchURL(items[index].file_name);
+                                },
+                                icon: SvgPicture.asset(
+                                  'asset/images/feather_eye.svg',
+                                  width: 16,
+                                  height: 16,
+                                  alignment: Alignment.center,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ),
+                              /*IconButton(
                               onPressed: () {
                                 requestDownload(items[index].file_name);
                               },
@@ -214,8 +214,8 @@ class DriverManualState extends State<DriverManual> {
                                 color: Theme.of(context).primaryColor,
                               ),
                             ),*/
-                          ])
-                      ,Divider()],
+                            ])
+                        ,Divider()],
                     ),
                   ),
                 );
@@ -232,7 +232,7 @@ class DriverManualState extends State<DriverManual> {
     );
   }
 
-  _getDriverManuals(String url) async {
+  _getDriverManual2(String url) async {
     final response = await API.getData(url);
 
     //debugger();

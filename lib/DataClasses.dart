@@ -1,3 +1,9 @@
+
+
+import 'dart:io';
+
+import 'package:all_road/Break.dart';
+
 class DriverManualData {
   String name;
   String file_name;
@@ -194,8 +200,7 @@ class TrailerQuestion {
   };
 }
 
-class JobDetailData
-{
+class JobDetailData {
   String job_id;
   String start_time;
   String start_km;
@@ -203,21 +208,193 @@ class JobDetailData
   String loads_done;
   String loads_comment;
   String status;
+  String truck_id;
+  String trailer1_id;
+  String trailer2_id;
+  String rego;
+  String truck_cat;
 
-  JobDetailData({this.job_id,this.start_time,this.start_km,this.worksite,this.loads_done,this.loads_comment,this.status});
+  JobDetailData({this.job_id,
+    this.start_time,
+    this.start_km,
+    this.worksite,
+    this.loads_done,
+    this.loads_comment,
+    this.status,
+    this.truck_id,
+    this.rego,
+    this.truck_cat,
+    this.trailer1_id,
+    this.trailer2_id});
+
   factory JobDetailData.fromJson(Map<String, dynamic> parsedJson) {
     return JobDetailData(
-      start_time : parsedJson["shift_start_time"] as String,
-      start_km : parsedJson["start_km"] as String,
-      worksite : parsedJson["worksite"] as String,
-      loads_done : parsedJson["loads_done"] as String,
-      loads_comment : parsedJson["loads_comment"] as String,
-      job_id : parsedJson["id"] as String,
-      status:parsedJson["type_status"] as String
+        start_time: parsedJson["shift_start_time"] as String,
+        start_km: parsedJson["start_km"] as String,
+        worksite: parsedJson["worksite"] as String,
+        loads_done: parsedJson["loads_done"] as String,
+        loads_comment: parsedJson["loads_comment"] as String,
+        job_id: parsedJson["id"] as String,
+        status: parsedJson["type_status"] as String,
+        truck_id: parsedJson["truck_id"] as String,
+        rego: parsedJson["rego"] as String,
+        truck_cat: parsedJson["truck_cat"] as String,
+        trailer1_id: parsedJson["trailer_id_1"] as String,
+        trailer2_id: parsedJson["trailer_id_2"] as String
+
+    );
+  }
+}
+
+class Worksite
+{
+  String id;
+  String name;
+  String document;
+  Worksite(
+      {
+        this.id,
+        this.name,
+        this.document,
+      });
+
+  factory Worksite.fromJson(Map<String, dynamic> parsedJson) {
+    return Worksite(
+      name: parsedJson["category_name"] as String,
+      document: parsedJson["document_type"] as String,
+      id: parsedJson["id"] as String,
+
+
     );
   }
 
 }
+
+
+
+class JobListingData
+{
+  String id;
+  String rego_no;
+  String start_date;
+  JobListingData(
+      {
+        this.id,
+        this.rego_no,
+        this.start_date,
+      });
+
+  factory JobListingData.fromJson(Map<String, dynamic> parsedJson) {
+    return JobListingData(
+      id: parsedJson["id"] as String,
+      rego_no: parsedJson["rego"] as String,
+      start_date: parsedJson["start_date"] as String,
+
+
+    );
+  }
+
+}
+
+class ImportantLinksData
+{
+  String id;
+  String name;
+  String links;
+  ImportantLinksData(
+      {
+        this.id,
+        this.name,
+        this.links,
+      });
+
+  factory ImportantLinksData.fromJson(Map<String, dynamic> parsedJson) {
+    return ImportantLinksData(
+      id: parsedJson["id"] as String,
+      name: parsedJson["category_name"] as String,
+      links: parsedJson["link"] as String,
+
+
+    );
+  }
+
+}
+
+
+class JobWorksheetData
+{
+  String id;
+  String name;
+  String links;
+  JobWorksheetData(
+      {
+        this.id,
+        this.name,
+        this.links,
+      });
+
+  factory JobWorksheetData.fromJson(Map<String, dynamic> parsedJson) {
+    return JobWorksheetData(
+      id: parsedJson["id"] as String,
+      name: parsedJson["worksheet_name"] as String,
+      links: parsedJson["worksheet"] as String,
+
+
+    );
+  }
+
+}
+
+
+class BreakTimeData
+{
+  String id;
+  String time;
+  BreakTimeData(
+      {
+        this.id,
+        this.time,
+      });
+
+  factory BreakTimeData.fromJson(Map<String, dynamic> parsedJson) {
+    return BreakTimeData(
+      time: parsedJson["timer"] as String,
+      id: parsedJson["id"] as String,
+
+
+    );
+  }
+
+}
+
+
+
+
+class WorksheetAttachmentData
+{
+  String id;
+  String name;
+  File file;
+  WorksheetAttachmentData(
+      {
+        this.id,
+        this.name,
+        this.file,
+      });
+
+  factory WorksheetAttachmentData.fromJson(Map<String, dynamic> parsedJson) {
+    return WorksheetAttachmentData(
+      name: parsedJson["category_name"] as String,
+      id: parsedJson["id"] as String,
+      file:null
+
+    );
+  }
+
+
+
+}
+
 
 
 

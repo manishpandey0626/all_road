@@ -55,8 +55,9 @@ class JobState extends State<Job> {
 
     // cat_name = data["cat_name"];
 
-  _getJobStatus();
-
+  //_getJobStatus();
+    _getTruck("act=GET_TRUCK");
+    _getTrailer("act=GET_TRAILER");
     if(data!=null) {
      // debugger();
       enable_truck = data["truck_status"]==null ? true : !data["truck_status"];
@@ -392,7 +393,7 @@ class JobState extends State<Job> {
     }
   }
 
-  _getJobStatus() async
+ /* _getJobStatus() async
   {
     Map<String,dynamic> user_data= await SessionManager.getUserDetails();
     driver_id= user_data[SessionManager.driverId];
@@ -402,7 +403,7 @@ class JobState extends State<Job> {
     data['driver_id'] =driver_id;
 
     var response = await API.postData(data);
- //  debugger();
+  //debugger();
     var resp = json.decode(response.body);
     if (resp["status"]) {
       Map<String, dynamic> data = Map<String, dynamic>();
@@ -415,6 +416,6 @@ class JobState extends State<Job> {
         _getTrailer("act=GET_TRAILER");
 
       }
-  }
+  }*/
 
 }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -17,6 +18,22 @@ class API {
   );
   }
 
+  static Future postMultipartData(Map<String, String> data,List<String> paths) async {
+   // debugger();
+    var request = http.MultipartRequest('POST', Uri.parse(baseUrl));
+    request.fields.addAll(data);
+    int i=1;
+    for(String path in paths) {
+      request.files.add(await http.MultipartFile.fromPath('file$i',path));
+      i++;
+    }
+    var res = await request.send();
+    final respStr = await res.stream.bytesToString();
+    return respStr;
+  }
+
+
+
   static Future uploadImage(filename,Map<String, String> data) async {
     var request = http.MultipartRequest('POST', Uri.parse(baseUrl));
     request.fields.addAll(data);
@@ -34,10 +51,7 @@ class API {
       request.files.add(await http.MultipartFile.fromPath('file$i',path));
       i++;
     }
-   // request.files.add(await http.MultipartFile.fromPath('brochure', brochure));
-
-
-    var res = await request.send();
+   var res = await request.send();
     final respStr = await res.stream.bytesToString();
     return respStr;
   }

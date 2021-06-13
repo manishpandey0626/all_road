@@ -14,21 +14,21 @@ import 'SessionManager.dart';
 import 'api.dart';
 import 'job.dart';
 
-class Precheck extends StatefulWidget {
+class PrecheckBreak extends StatefulWidget {
   Map<String, dynamic> data = Map<String, dynamic>();
 
-  Precheck({Key key, this.data}) : super(key: key);
+  PrecheckBreak({Key key, this.data}) : super(key: key);
 
   @override
-  PrecheckState createState() => PrecheckState(data);
+  PrecheckBreakState createState() => PrecheckBreakState(data);
 }
 
-class PrecheckState extends State<Precheck> {
+class PrecheckBreakState extends State<PrecheckBreak> {
   final ImagePicker _picker = ImagePicker();
 
   Map<String, dynamic> data = Map<String, dynamic>();
 
-  PrecheckState(this.data);
+  PrecheckBreakState(this.data);
 
   List<PreCheckQuestion> items = [];
   List<TrailerQuestion> trailer_items = [];
@@ -48,6 +48,8 @@ class PrecheckState extends State<Precheck> {
   Truck selected_truck;
   Truck selected_trailer1;
   Truck selected_trailer2;
+  String job_id;
+  String break_id;
 
   bool truck_precheck_status = false;
   bool trailer1_precheck_status = false;
@@ -58,6 +60,8 @@ class PrecheckState extends State<Precheck> {
     selected_truck = data['selected_truck'];
     selected_trailer1 = data["selected_trailer1"];
     selected_trailer2 = data["selected_trailer2"];
+    job_id=data["job_id"];
+    break_id=data["break_id"];
 
     if (selected_truck.truck_cat == "1") {
       trailer1_flag = true;
@@ -76,28 +80,10 @@ class PrecheckState extends State<Precheck> {
       // NEW
     );
 
-    truck_precheck_status = data['truck_precheck_status'] != null ? data['truck_precheck_status'] : false;
-    trailer1_precheck_status = data['truck_precheck_status'] != null ? data['trailer1_precheck_status'] : false;
-    trailer2_precheck_status = data['truck_precheck_status'] != null ? data['trailer2_precheck_status'] : false;
+
 //debugger();
-    if(truck_precheck_status)
-      {
 
-        upload_files=data['truck_files'];
-        truck_comment.text=data['truck_comment'];
-
-      }
-    if(trailer1_precheck_status)
-      {
-        upload_files_trailer1=data['trailer1_files'];
-        trailer1_comment.text=data['trailer1_comment'];
-      }
-    if(trailer2_precheck_status)
-      {
-        upload_files_trailer2=data['trailer2_files'];
-        trailer2_comment.text=data['trailer2_comment'];
-      }
-    _getPrecheck("act=GET_PRECHECK_QUES");
+    _getPrecheckBreak("act=GET_PRECHECK_QUES");
 
     // cat_name = data["cat_name"];
 
@@ -187,13 +173,13 @@ class PrecheckState extends State<Precheck> {
                   ])),
           SliverToBoxAdapter(
               child: Container(
-            height: 50,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-            ),
-          )),
+                height: 50,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+                ),
+              )),
           SliverToBoxAdapter(
               child: Container(
                   color: Colors.grey[400],
@@ -202,16 +188,16 @@ class PrecheckState extends State<Precheck> {
                       style: Theme.of(context).textTheme.headline1))),
           SliverList(
             delegate:
-                SliverChildBuilderDelegate((BuildContext context, int index) {
+            SliverChildBuilderDelegate((BuildContext context, int index) {
               return GestureDetector(
                   onTap: () {},
                   child: Container(
                       color: Colors.white,
                       padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                      EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                       child: Container(
                         padding:
-                            EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                        EdgeInsets.symmetric(horizontal: 8, vertical: 0),
                         decoration: BoxDecoration(
                           color: MyColors.greyBackground,
                           borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -224,7 +210,7 @@ class PrecheckState extends State<Precheck> {
                                   child: Text(
                                     items[index].question,
                                     style:
-                                        Theme.of(context).textTheme.headline5,
+                                    Theme.of(context).textTheme.headline5,
                                   )),
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -237,10 +223,10 @@ class PrecheckState extends State<Precheck> {
                                         onChanged: truck_precheck_status
                                             ? null
                                             : (val) {
-                                                setState(() {
-                                                  items[index].myanswer = val;
-                                                });
-                                              }),
+                                          setState(() {
+                                            items[index].myanswer = val;
+                                          });
+                                        }),
                                     Text(items[index].option1),
                                   ]),
                                   SizedBox(width: 50),
@@ -251,10 +237,10 @@ class PrecheckState extends State<Precheck> {
                                         onChanged: truck_precheck_status
                                             ? null
                                             : (val) {
-                                                setState(() {
-                                                  items[index].myanswer = val;
-                                                });
-                                              }),
+                                          setState(() {
+                                            items[index].myanswer = val;
+                                          });
+                                        }),
                                     Text(items[index].option2)
                                   ])
                                 ],
@@ -265,75 +251,75 @@ class PrecheckState extends State<Precheck> {
           ),
           SliverToBoxAdapter(
               child: Container(
-            color: Colors.white,
-            child: Padding(
-              padding: EdgeInsets.all(20),
-              child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: MyColors.greyBackground,
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                  ),
-                  child: Column(children: [
-                    TextField(
-                        enabled: !truck_precheck_status,
-                        controller: truck_comment,
-                        decoration: InputDecoration(hintText: "Comment"),
-                        minLines: 2,
-                        maxLines: 4),
-                    SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
+                color: Colors.white,
+                child: Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: MyColors.greyBackground,
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                      ),
+                      child: Column(children: [
+                        TextField(
+                            enabled: !truck_precheck_status,
+                            controller: truck_comment,
+                            decoration: InputDecoration(hintText: "Comment"),
+                            minLines: 2,
+                            maxLines: 4),
+                        SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
 
-                              //  padding: EdgeInsets.fromLTRB(50, 15, 50, 15),
-                              shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          )),
-                          onPressed: truck_precheck_status
-                              ? null
-                              : () {
-                                  getImageFromGallery();
-                                },
-                          child: Text('Gallery',
-                              style:
+                                //  padding: EdgeInsets.fromLTRB(50, 15, 50, 15),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  )),
+                              onPressed: truck_precheck_status
+                                  ? null
+                                  : () {
+                                getImageFromGallery();
+                              },
+                              child: Text('Gallery',
+                                  style:
                                   TextStyle(color: Colors.white, fontSize: 16)),
+                            ),
+                            SizedBox(width: 20),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  )),
+                              onPressed: truck_precheck_status
+                                  ? null
+                                  : () {
+                                getImageFromCamera();
+                              },
+                              child: Text('Camera',
+                                  style:
+                                  TextStyle(color: Colors.white, fontSize: 16)),
+                            )
+                          ],
                         ),
-                        SizedBox(width: 20),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          )),
-                          onPressed: truck_precheck_status
-                              ? null
-                              : () {
-                                  getImageFromCamera();
-                                },
-                          child: Text('Camera',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 16)),
+                        SizedBox(height: 20),
+                        Container(
+                          height: 60,
+                          child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              children: upload_files.map((File file) {
+                                return Image.file(
+                                  File(file.path),
+                                  width: 50,
+                                  height: 50,
+                                );
+                              }).toList()),
                         )
-                      ],
-                    ),
-                    SizedBox(height: 20),
-                    Container(
-                      height: 60,
-                      child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          children: upload_files.map((File file) {
-                            return Image.file(
-                              File(file.path),
-                              width: 50,
-                              height: 50,
-                            );
-                          }).toList()),
-                    )
-                  ])),
-            ),
-          )),
+                      ])),
+                ),
+              )),
           SliverVisibility(
             visible: trailer1_flag,
             sliver: SliverToBoxAdapter(
@@ -347,16 +333,16 @@ class PrecheckState extends State<Precheck> {
             visible: trailer1_flag,
             sliver: SliverList(
               delegate:
-                  SliverChildBuilderDelegate((BuildContext context, int index) {
+              SliverChildBuilderDelegate((BuildContext context, int index) {
                 return GestureDetector(
                     onTap: () {},
                     child: Container(
                         color: Colors.white,
                         padding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                        EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                         child: Container(
                           padding:
-                              EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                          EdgeInsets.symmetric(horizontal: 8, vertical: 0),
                           decoration: BoxDecoration(
                             color: MyColors.greyBackground,
                             borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -369,7 +355,7 @@ class PrecheckState extends State<Precheck> {
                                     child: Text(
                                       trailer_items[index].question,
                                       style:
-                                          Theme.of(context).textTheme.headline5,
+                                      Theme.of(context).textTheme.headline5,
                                     )),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -379,15 +365,15 @@ class PrecheckState extends State<Precheck> {
                                       Radio(
                                           value: trailer_items[index].option1,
                                           groupValue:
-                                              trailer_items[index].myanswer,
+                                          trailer_items[index].myanswer,
                                           onChanged: trailer1_precheck_status
                                               ? null
                                               : (val) {
-                                                  setState(() {
-                                                    trailer_items[index]
-                                                        .myanswer = val;
-                                                  });
-                                                }),
+                                            setState(() {
+                                              trailer_items[index]
+                                                  .myanswer = val;
+                                            });
+                                          }),
                                       Text(trailer_items[index].option1),
                                     ]),
                                     SizedBox(width: 50),
@@ -395,15 +381,15 @@ class PrecheckState extends State<Precheck> {
                                       Radio(
                                           value: trailer_items[index].option2,
                                           groupValue:
-                                              trailer_items[index].myanswer,
+                                          trailer_items[index].myanswer,
                                           onChanged: trailer1_precheck_status
                                               ? null
                                               : (val) {
-                                                  setState(() {
-                                                    trailer_items[index]
-                                                        .myanswer = val;
-                                                  });
-                                                }),
+                                            setState(() {
+                                              trailer_items[index]
+                                                  .myanswer = val;
+                                            });
+                                          }),
                                       Text(trailer_items[index].option2)
                                     ])
                                   ],
@@ -416,74 +402,74 @@ class PrecheckState extends State<Precheck> {
           SliverVisibility(
             sliver: SliverToBoxAdapter(
                 child: Container(
-              color: Colors.white,
-              child: Padding(
-                padding: EdgeInsets.all(20),
-                child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: MyColors.greyBackground,
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                    ),
-                    child: Column(children: [
-                      TextField(
-                          enabled: !trailer1_precheck_status,
-                          controller: trailer1_comment,
-                          decoration: InputDecoration(hintText: "Comment"),
-                          minLines: 2,
-                          maxLines: 4),
-                      SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                //  padding: EdgeInsets.fromLTRB(50, 15, 50, 15),
-                                shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            )),
-                            onPressed: trailer1_precheck_status
-                                ? null
-                                : () {
-                                    getImageFromGallery(type: "trailer1");
-                                  },
-                            child: Text('Gallery',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 16)),
+                  color: Colors.white,
+                  child: Padding(
+                    padding: EdgeInsets.all(20),
+                    child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: MyColors.greyBackground,
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                        ),
+                        child: Column(children: [
+                          TextField(
+                              enabled: !trailer1_precheck_status,
+                              controller: trailer1_comment,
+                              decoration: InputDecoration(hintText: "Comment"),
+                              minLines: 2,
+                              maxLines: 4),
+                          SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  //  padding: EdgeInsets.fromLTRB(50, 15, 50, 15),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    )),
+                                onPressed: trailer1_precheck_status
+                                    ? null
+                                    : () {
+                                  getImageFromGallery(type: "trailer1");
+                                },
+                                child: Text('Gallery',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 16)),
+                              ),
+                              SizedBox(width: 20),
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    )),
+                                onPressed: trailer1_precheck_status
+                                    ? null
+                                    : () {
+                                  getImageFromCamera(type: "trailer1");
+                                },
+                                child: Text('Camera',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 16)),
+                              )
+                            ],
                           ),
-                          SizedBox(width: 20),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            )),
-                            onPressed: trailer1_precheck_status
-                                ? null
-                                : () {
-                                    getImageFromCamera(type: "trailer1");
-                                  },
-                            child: Text('Camera',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 16)),
+                          SizedBox(height: 20),
+                          Container(
+                            height: 60,
+                            child: ListView(
+                                scrollDirection: Axis.horizontal,
+                                children: upload_files_trailer1.map((File file) {
+                                  return Image.file(
+                                    File(file.path),
+                                    width: 50,
+                                    height: 50,
+                                  );
+                                }).toList()),
                           )
-                        ],
-                      ),
-                      SizedBox(height: 20),
-                      Container(
-                        height: 60,
-                        child: ListView(
-                            scrollDirection: Axis.horizontal,
-                            children: upload_files_trailer1.map((File file) {
-                              return Image.file(
-                                File(file.path),
-                                width: 50,
-                                height: 50,
-                              );
-                            }).toList()),
-                      )
-                    ])),
-              ),
-            )),
+                        ])),
+                  ),
+                )),
           ),
           SliverVisibility(
             visible: trailer2_flag,
@@ -498,16 +484,16 @@ class PrecheckState extends State<Precheck> {
             visible: trailer2_flag,
             sliver: SliverList(
               delegate:
-                  SliverChildBuilderDelegate((BuildContext context, int index) {
+              SliverChildBuilderDelegate((BuildContext context, int index) {
                 return GestureDetector(
                     onTap: () {},
                     child: Container(
                         color: Colors.white,
                         padding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                        EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                         child: Container(
                           padding:
-                              EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                          EdgeInsets.symmetric(horizontal: 8, vertical: 0),
                           decoration: BoxDecoration(
                             color: MyColors.greyBackground,
                             borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -520,7 +506,7 @@ class PrecheckState extends State<Precheck> {
                                     child: Text(
                                       trailer2_items[index].question,
                                       style:
-                                          Theme.of(context).textTheme.headline5,
+                                      Theme.of(context).textTheme.headline5,
                                     )),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -530,15 +516,15 @@ class PrecheckState extends State<Precheck> {
                                       Radio(
                                           value: trailer2_items[index].option1,
                                           groupValue:
-                                              trailer2_items[index].myanswer,
+                                          trailer2_items[index].myanswer,
                                           onChanged: trailer2_precheck_status
                                               ? null
                                               : (val) {
-                                                  setState(() {
-                                                    trailer2_items[index]
-                                                        .myanswer = val;
-                                                  });
-                                                }),
+                                            setState(() {
+                                              trailer2_items[index]
+                                                  .myanswer = val;
+                                            });
+                                          }),
                                       Text(trailer2_items[index].option1),
                                     ]),
                                     SizedBox(width: 50),
@@ -546,15 +532,15 @@ class PrecheckState extends State<Precheck> {
                                       Radio(
                                           value: trailer2_items[index].option2,
                                           groupValue:
-                                              trailer2_items[index].myanswer,
+                                          trailer2_items[index].myanswer,
                                           onChanged: trailer2_precheck_status
                                               ? null
                                               : (val) {
-                                                  setState(() {
-                                                    trailer2_items[index]
-                                                        .myanswer = val;
-                                                  });
-                                                }),
+                                            setState(() {
+                                              trailer2_items[index]
+                                                  .myanswer = val;
+                                            });
+                                          }),
                                       Text(trailer2_items[index].option2)
                                     ])
                                   ],
@@ -568,74 +554,74 @@ class PrecheckState extends State<Precheck> {
             visible: trailer2_flag,
             sliver: SliverToBoxAdapter(
                 child: Container(
-              color: Colors.white,
-              child: Padding(
-                padding: EdgeInsets.all(20),
-                child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: MyColors.greyBackground,
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                    ),
-                    child: Column(children: [
-                      TextField(
-                          enabled: !trailer2_precheck_status,
-                          controller: trailer2_comment,
-                          decoration: InputDecoration(hintText: "Comment"),
-                          minLines: 2,
-                          maxLines: 4),
-                      SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                //  padding: EdgeInsets.fromLTRB(50, 15, 50, 15),
-                                shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            )),
-                            onPressed: trailer2_precheck_status
-                                ? null
-                                : () {
-                                    getImageFromGallery(type: "trailer2");
-                                  },
-                            child: Text('Gallery',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 16)),
+                  color: Colors.white,
+                  child: Padding(
+                    padding: EdgeInsets.all(20),
+                    child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: MyColors.greyBackground,
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                        ),
+                        child: Column(children: [
+                          TextField(
+                              enabled: !trailer2_precheck_status,
+                              controller: trailer2_comment,
+                              decoration: InputDecoration(hintText: "Comment"),
+                              minLines: 2,
+                              maxLines: 4),
+                          SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  //  padding: EdgeInsets.fromLTRB(50, 15, 50, 15),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    )),
+                                onPressed: trailer2_precheck_status
+                                    ? null
+                                    : () {
+                                  getImageFromGallery(type: "trailer2");
+                                },
+                                child: Text('Gallery',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 16)),
+                              ),
+                              SizedBox(width: 20),
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    )),
+                                onPressed: trailer2_precheck_status
+                                    ? null
+                                    : () {
+                                  getImageFromCamera(type: "trailer2");
+                                },
+                                child: Text('Camera',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 16)),
+                              )
+                            ],
                           ),
-                          SizedBox(width: 20),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            )),
-                            onPressed: trailer2_precheck_status
-                                ? null
-                                : () {
-                                    getImageFromCamera(type: "trailer2");
-                                  },
-                            child: Text('Camera',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 16)),
+                          SizedBox(height: 20),
+                          Container(
+                            height: 60,
+                            child: ListView(
+                                scrollDirection: Axis.horizontal,
+                                children: upload_files_trailer2.map((File file) {
+                                  return Image.file(
+                                    File(file.path),
+                                    width: 50,
+                                    height: 50,
+                                  );
+                                }).toList()),
                           )
-                        ],
-                      ),
-                      SizedBox(height: 20),
-                      Container(
-                        height: 60,
-                        child: ListView(
-                            scrollDirection: Axis.horizontal,
-                            children: upload_files_trailer2.map((File file) {
-                              return Image.file(
-                                File(file.path),
-                                width: 50,
-                                height: 50,
-                              );
-                            }).toList()),
-                      )
-                    ])),
-              ),
-            )),
+                        ])),
+                  ),
+                )),
           ),
           SliverToBoxAdapter(
               child: Container(
@@ -643,22 +629,22 @@ class PrecheckState extends State<Precheck> {
                   color: Colors.white,
                   child: items.length > 0
                       ? ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.fromLTRB(50, 15, 50, 15),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50.0),
-                              )),
-                          onPressed: () {
-                            bool flag = items.any((element) =>
-                                element.answer != element.myanswer);
-                            print("flag===>${flag}");
+                    style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.fromLTRB(50, 15, 50, 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50.0),
+                        )),
+                    onPressed: () {
+                      bool flag = items.any((element) =>
+                      element.answer != element.myanswer);
+                      print("flag===>${flag}");
 
-                            _saveData();
-                          },
-                          child: Text('Submit Test',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 16)),
-                        )
+                      _saveData();
+                    },
+                    child: Text('Submit Test',
+                        style:
+                        TextStyle(color: Colors.white, fontSize: 16)),
+                  )
                       : SizedBox())),
           SliverFillRemaining(
             hasScrollBody: false,
@@ -671,7 +657,7 @@ class PrecheckState extends State<Precheck> {
     );
   }
 
-  _getPrecheck(String url) async {
+  _getPrecheckBreak(String url) async {
     final response = await API.getData(url);
 
     //debugger();
@@ -681,7 +667,7 @@ class PrecheckState extends State<Precheck> {
         Iterable list = response_data["data"];
         items = list
             .map((model) =>
-                PreCheckQuestion.fromJson(model, status: truck_precheck_status))
+            PreCheckQuestion.fromJson(model, status: truck_precheck_status))
             .toList();
       });
     }
@@ -697,11 +683,11 @@ class PrecheckState extends State<Precheck> {
         Iterable list = response_data["data"];
         trailer_items = list
             .map((model) => TrailerQuestion.fromJson(model,
-                status: trailer1_precheck_status))
+            status: trailer1_precheck_status))
             .toList();
         trailer2_items = list
             .map((model) => TrailerQuestion.fromJson(model,
-                status: trailer2_precheck_status))
+            status: trailer2_precheck_status))
             .toList();
       });
     }
@@ -762,100 +748,89 @@ class PrecheckState extends State<Precheck> {
 
   _saveData() async {
     String precheck_data =
-        jsonEncode(items.map((data) => data.toJson()).toList());
+    jsonEncode(items.map((data) => data.toJson()).toList());
 
     String precheck_trailer_data =
-        jsonEncode(trailer_items.map((data) => data.toJson()).toList());
+    jsonEncode(trailer_items.map((data) => data.toJson()).toList());
     String precheck_trailer2_data =
-        jsonEncode(trailer2_items.map((data) => data.toJson()).toList());
+    jsonEncode(trailer2_items.map((data) => data.toJson()).toList());
 
     bool truck_status =
-        !items.any((element) => element.answer != element.myanswer);
+    !items.any((element) => element.answer != element.myanswer);
     bool trailer1_status =
-        !trailer_items.any((element) => element.answer != element.myanswer);
+    !trailer_items.any((element) => element.answer != element.myanswer);
     bool trailer2_status =
-        !trailer2_items.any((element) => element.answer != element.myanswer);
+    !trailer2_items.any((element) => element.answer != element.myanswer);
 
 
     String truck_cat = selected_truck.truck_cat;
 
- Map<String, dynamic> data = Map<String, String>();
+    Map<String, dynamic> data = Map<String, String>();
 
     Map<String,dynamic> user_data= await SessionManager.getUserDetails();
     String driver_id= user_data[SessionManager.driverId];
 
-  data['act'] = 'SAVE_PRECHECK';
-  data["user_id"] = driver_id;
-  data["truck_id"] = selected_truck.id;
-  data["trailer1_id"] = truck_cat=="1"?selected_trailer1.id:"";
-  data["trailer2_id"] = truck_cat=="2"?selected_trailer2.id:"";
-  data["precheck_truck"] = precheck_data;
-  data["precheck_trailer"] = truck_cat=="1"?precheck_trailer_data:"";
-  data["precheck_trailer2"] = truck_cat=="2"?precheck_trailer2_data:"";
-  data["truck_comment"] = truck_comment.text;
-  data["trailer1_comment"] = trailer1_comment.text;
-  data["trailer2_comment"] = trailer2_comment.text;
-  data["truck_status"]=truck_status.toString();
-  data["trailer1_status"]=trailer1_status.toString();
-  data["trailer2_status"]=trailer2_status.toString();
-  data["truck_cat"]=truck_cat;
+    data['act'] = 'SAVE_PRECHECK_BREAK';
+    data["user_id"] = driver_id;
+    data["truck_id"] = selected_truck.id;
+    data["trailer1_id"] = truck_cat=="1"?selected_trailer1.id:"";
+    data["trailer2_id"] = truck_cat=="2"?selected_trailer2.id:"";
+    data["precheck_truck"] = precheck_data;
+    data["precheck_trailer"] = truck_cat=="1"?precheck_trailer_data:"";
+    data["precheck_trailer2"] = truck_cat=="2"?precheck_trailer2_data:"";
+    data["truck_comment"] = truck_comment.text;
+    data["trailer1_comment"] = trailer1_comment.text;
+    data["trailer2_comment"] = trailer2_comment.text;
+    data["truck_status"]=truck_status.toString();
+    data["trailer1_status"]=trailer1_status.toString();
+    data["trailer2_status"]=trailer2_status.toString();
+    data["truck_cat"]=truck_cat;
+    data["job_id"]=job_id;
+    data["break_id"]=break_id;
+debugger();
+    List<String> paths=[];
+    paths.addAll(upload_files.map((file)=>file.path));
+    paths.addAll(upload_files_trailer1.map((file)=>file.path));
+    paths.addAll(upload_files_trailer2.map((file)=>file.path));
+    var response = await API.saveBusiness(data,paths);
+    //debugger();
+    var resp = json.decode(response);
+    if (resp["status"]) {
 
- List<String> paths=[];
- paths.addAll(upload_files.map((file)=>file.path));
- paths.addAll(upload_files_trailer1.map((file)=>file.path));
- paths.addAll(upload_files_trailer2.map((file)=>file.path));
-  var response = await API.saveBusiness(data,paths);
-  //debugger();
-  var resp = json.decode(response);
-  if (resp["status"]) {
+
+      if ((truck_cat == "0" && truck_status) ||
+          (truck_cat == "1" && truck_status && trailer1_status) ||
+          (truck_cat == "2" && truck_status && trailer1_status &&
+              trailer2_status)) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: const Text('Record saved successfully!!'),
+          duration: const Duration(seconds: 3),
+
+        ));
+        Map<String, dynamic> data = Map<String, dynamic>();
+        data['job_id'] = job_id;
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(
+                builder: (BuildContext context) => JobDetail(data: data)));
+      }
+      else {
+
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(
+                builder: (BuildContext context) => Job()));
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: const Text('Precheck failed!!'),
+          duration: const Duration(seconds: 3),
+
+        ));
 
 
-    if ((truck_cat == "0" && truck_status) ||
-        (truck_cat == "1" && truck_status && trailer1_status) ||
-        (truck_cat == "2" && truck_status && trailer1_status &&
-            trailer2_status)) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: const Text('Record saved successfully!!'),
-        duration: const Duration(seconds: 3),
-
-      ));
-      Map<String, dynamic> data = Map<String, dynamic>();
-      data['job_id'] = resp["job_id"];
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(
-              builder: (BuildContext context) => JobDetail(data: data)));
+        //}
+        //}
+      }
     }
-    else {
-
-     // debugger();
-      Map<String, dynamic> data = Map<String, dynamic>();
-      data['selected_truck'] = selected_truck;
-      data['selected_trailer1'] = selected_trailer1;
-      data['selected_trailer2'] = selected_trailer2;
-      data['truck_status'] = truck_status;
-      data['trailer1_status'] = trailer1_status;
-      data['trailer2_status'] = trailer2_status;
-      data['truck_files'] = upload_files;
-      data['trailer1_files'] = upload_files_trailer1;
-      data['trailer2_files'] = upload_files_trailer2;
-      data['truck_comment'] = truck_comment.text;
-      data['trailer1_comment'] = trailer1_comment.text;
-      data['trailer2_comment'] = trailer2_comment.text;
-
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: const Text('Precheck failed!!'),
-        duration: const Duration(seconds: 3),
-
-      ));
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(
-              builder: (BuildContext context) => Job(data: data)));
-
-      //}
-      //}
-    }
-  }
-  else
+    else
     {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('Error: ${resp["msg"]}'),
@@ -863,5 +838,5 @@ class PrecheckState extends State<Precheck> {
 
       ));
     }
-    }
+  }
 }
