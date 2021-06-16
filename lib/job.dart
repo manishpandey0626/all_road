@@ -258,7 +258,7 @@ class JobState extends State<Job> {
                         setState(() {
                           selected_trailer2 = Value;
                         });
-                      }:false,
+                      }:null,
                       items: trailer1_items.map((Truck trailer) {
                         return DropdownMenuItem<Truck>(
                           value: trailer,
@@ -362,10 +362,13 @@ class JobState extends State<Job> {
     if (this.mounted) {
       setState(() {
         Iterable list = response_data["data"];
-    //  debugger();
+    // debugger();
         truck_items = list.map((model) => Truck.fromJson(model)).toList();
         if(data !=null) {
-          selected_truck =truck_items.singleWhere((element) => element.id==data['selected_truck'].id);
+          if(truck_items.length>0) {
+            selected_truck = truck_items.singleWhere((element) => element.id ==
+                data['selected_truck'].id);
+          }
         }
       });
     }
@@ -382,11 +385,19 @@ class JobState extends State<Job> {
         trailer1_items = list.map((model) => Truck.fromJson(model)).toList();
         trailer2_items = list.map((model) => Truck.fromJson(model)).toList();
         if(data !=null) {
-          selected_trailer =trailer1_items.singleWhere((element) => element.id==data['selected_trailer1'].id);
-          if(selected_truck.truck_cat=="2") {
-            selected_trailer2 =
-                trailer2_items.singleWhere((element) => element.id ==
-                    data['selected_trailer2'].id);
+          if(selected_truck!=null) {
+            if (selected_truck.truck_cat == "1") {
+              selected_trailer =
+                  trailer1_items.singleWhere((element) =>
+                  element.id ==
+                      data['selected_trailer1'].id);
+            }
+            if (selected_truck.truck_cat == "2") {
+              selected_trailer2 =
+                  trailer2_items.singleWhere((element) =>
+                  element.id ==
+                      data['selected_trailer2'].id);
+            }
           }
         }
       });

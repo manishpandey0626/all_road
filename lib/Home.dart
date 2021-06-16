@@ -1,19 +1,13 @@
-import 'dart:convert';
-import 'dart:developer';
 
 import 'package:all_road/ImportantLinks.dart';
-import 'package:all_road/JobDetail.dart';
 import 'package:all_road/JobListing.dart';
 import 'package:all_road/MyColors.dart';
-import 'package:all_road/precheck.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'DataClasses.dart';
 import 'SessionManager.dart';
-import 'api.dart';
-import 'driver_manual.dart';
 import 'driver_manual2.dart';
 import 'login.dart';
 
@@ -31,22 +25,10 @@ class HomeState extends State<Home> {
 
   HomeState(this.data);
 
-  List<Truck> truck_items = [];
-  List<Truck> trailer1_items=[];
-  List<Truck> trailer2_items=[];
-  List<Truck> banners = [];
-  String cat_name;
-  int _current = 0;
-  int item_cnt = 0;
-  Truck selected_truck;
-  Truck selected_trailer;
-  Truck selected_trailer2;
-  bool enable_truck=true;
-  bool enable_trailer1=true;
-  bool enable_trailer2=true;
+
 
   String driver_id;
-  List<PreCheckQuestion> truck_data=[];
+
 
 
   @override
@@ -61,13 +43,7 @@ class HomeState extends State<Home> {
     // cat_name = data["cat_name"];
 
 
-    if(data!=null) {
-      // debugger();
-      enable_truck = data["truck_status"]==null ? true : !data["truck_status"];
-      enable_trailer1 = data["trailer1_status"]==null ? false : !data["trailer1_status"];
-      enable_trailer2 = data["trailer2_status"]==null ? false : !data["trailer2_status"];
 
-    }
 
 
     /* _getBanners("act=GET_BANNER&cat_id=" + data["cat_id"]);*/

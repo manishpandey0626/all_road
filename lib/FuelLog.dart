@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:all_road/MyColors.dart';
+import 'package:all_road/utility.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -267,10 +268,10 @@ class FuelLogState extends State<FuelLog> {
             left: 20.0,
             right: 20.0),
         child: TextFormField(
-          inputFormatters: is_numeric
+         /* inputFormatters: is_numeric
               ? [FilteringTextInputFormatter.digitsOnly]
-              : [FilteringTextInputFormatter.deny("~")],
-          keyboardType: is_numeric ? TextInputType.number : TextInputType.text,
+              : [FilteringTextInputFormatter.deny("~")],*/
+          keyboardType: is_numeric ? TextInputType.numberWithOptions(decimal:true) : TextInputType.text,
           enabled: is_enable,
           readOnly: readOnly,
           controller: controller,
@@ -349,6 +350,23 @@ class FuelLogState extends State<FuelLog> {
 
   _saveData() async {
 
+    if(amount.text.isEmpty)
+    {
+      Utility.showMsg(context,"Plese enter amount");
+      return;
+    }
+    if(liters.text.isEmpty)
+    {
+      Utility.showMsg(context,"Please enter liters.");
+      return;
+    }
+
+
+    if(upload_files.length<1)
+    {
+      Utility.showMsg(context,"Plese upload atleast one fuel log image.");
+      return;
+    }
 
     Map<String, dynamic> data1 = Map<String, String>();
 

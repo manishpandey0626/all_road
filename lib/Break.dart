@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:all_road/MyColors.dart';
 import 'package:all_road/precheck_break.dart';
+import 'package:all_road/utility.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -90,6 +91,16 @@ class BreakState extends State<Break> with WidgetsBindingObserver {
                   .textTheme
                   .headline1,
             )),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            tooltip: 'Refresh',
+            onPressed: () {
+              _getBreakStatus();
+            },
+          ),
+        ],
+
       ),
       body: SafeArea(
           child: CustomScrollView( slivers: [
@@ -198,7 +209,7 @@ class BreakState extends State<Break> with WidgetsBindingObserver {
                               child: Row(
                                 children: <Widget>[
                                   Text(
-                                    breaktime.time,
+                                    breaktime.display_time,
                                     style: TextStyle(color: Colors.black),
                                   ),
                                 ],
@@ -210,6 +221,49 @@ class BreakState extends State<Break> with WidgetsBindingObserver {
 
                     ],
                   )))),
+            SliverToBoxAdapter(
+
+                child: Container(
+                  color: Colors.white,
+                  child: Padding(
+                    padding: EdgeInsets.all(20),
+                    child: Column(
+                        children:[
+                          Visibility(
+                            visible: !break_expire || precheck_status=="Y",
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  padding: EdgeInsets.fromLTRB(50, 15, 50, 15),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(50.0),
+                                  )),
+                              onPressed: break_expire?() {
+                                //  _saveData();
+                                showAlertDialog(context);
+                              }:null,
+                              child: Text('Take a Break',
+                                  style: TextStyle(color: Colors.white, fontSize: 16)),
+                            ),
+                          ),
+                          Visibility(
+                            visible: break_expire && precheck_status=="N",
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  padding: EdgeInsets.fromLTRB(50, 15, 50, 15),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(50.0),
+                                  )),
+                              onPressed: () {
+                                _precheck();
+                              },
+                              child: Text('Precheck',
+                                  style: TextStyle(color: Colors.white, fontSize: 16)),
+                            ),
+                          ),]
+                    ),
+                  ),
+                )
+            ),
       SliverFillRemaining(
         hasScrollBody: false,
         child: Container(
@@ -220,48 +274,7 @@ class BreakState extends State<Break> with WidgetsBindingObserver {
           ),
         ),
       ),
-      SliverToBoxAdapter(
 
-        child: Container(
-          color: Colors.white,
-          child: Padding(
-              padding: EdgeInsets.all(20),
-              child: Column(
-                  children:[
-              Visibility(
-                visible: !break_expire || precheck_status=="Y",
-                child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.fromLTRB(50, 15, 50, 15),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50.0),
-                )),
-          onPressed: break_expire?() {
-            _saveData();
-          }:null,
-          child: Text('Take a Break',
-                style: TextStyle(color: Colors.white, fontSize: 16)),
-        ),
-              ),
-        Visibility(
-          visible: break_expire && precheck_status=="N",
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.fromLTRB(50, 15, 50, 15),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50.0),
-                )),
-            onPressed: () {
-              _precheck();
-            },
-            child: Text('Precheck',
-                style: TextStyle(color: Colors.white, fontSize: 16)),
-          ),
-        ),]
-      ),
-    ),
-    )
-    )
     ]),
     ),
     );
@@ -358,7 +371,7 @@ class BreakState extends State<Break> with WidgetsBindingObserver {
 
 
   _getBreakStatus() async {
-    debugger();
+    //debugger();
     Map<String, dynamic> post_data = Map<String, dynamic>();
     post_data["act"] = "BREAK_STATUS";
     post_data["job_id"]=data["job_id"];
@@ -368,7 +381,7 @@ class BreakState extends State<Break> with WidgetsBindingObserver {
     var response_data = json.decode(response.body);
     if (this.mounted) {
       setState(() {
-        debugger();
+        //debugger();
         break_expire=response_data['expire'];
         precheck_status=response_data['precheck_status'];
         break_id=response_data['break_id'];
@@ -377,7 +390,11 @@ class BreakState extends State<Break> with WidgetsBindingObserver {
   }
 
   _saveData() async {
-
+if(selected_time==null)
+  {
+    Utility.showMsg(context,"Please select break time.");
+    return;
+  }
 
     Map<String, dynamic> data1 = Map<String, String>();
 
@@ -416,5 +433,42 @@ class BreakState extends State<Break> with WidgetsBindingObserver {
 
       ));
     }
+  }
+
+
+  showAlertDialog(BuildContext context) {
+
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: Text("Cancel"),
+      onPressed:  () {
+        Navigator.of(context).pop();
+      },
+    );
+    Widget continueButton = TextButton(
+      child: Text("Continue"),
+      onPressed:  () {
+        Navigator.of(context).pop();
+        _saveData();
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Take a Break"),
+      content: Text("Do you want to take a break of ${selected_time.display_time}?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }

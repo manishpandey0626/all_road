@@ -3,12 +3,14 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:all_road/MyColors.dart';
+import 'package:all_road/utility.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 
+import 'Dashboard.dart';
 import 'SessionManager.dart';
 import 'api.dart';
 
@@ -307,11 +309,12 @@ class BreakDownState extends State<BreakDown> {
 
   Future<Null> _selectDate(BuildContext context,
       TextEditingController controller) async {
+    var date= DateTime.now();
     final DateTime picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2050),
+      firstDate: DateTime(date.year,date.month-6,date.day),
+      lastDate: DateTime.now(),
     );
     if (picked != null)
       setState(() {
@@ -364,6 +367,17 @@ class BreakDownState extends State<BreakDown> {
 
   _saveData() async {
 
+    if(reportedDate.text.isEmpty)
+    {
+      Utility.showMsg(context,"Plese select Reported date.");
+      return;
+    }
+
+    if(upload_files.length<1)
+    {
+      Utility.showMsg(context,"Plese upload atleast one incident image.");
+      return;
+    }
 
     Map<String, dynamic> data1 = Map<String, String>();
 
@@ -386,20 +400,20 @@ class BreakDownState extends State<BreakDown> {
     //debugger();
     var resp = json.decode(response);
     if (resp["status"]) {
-      Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Incident saved successfully.'),
-        duration: const Duration(seconds: 5),
+      Navigator.pushReplacement(context, MaterialPageRoute(
+          builder: (context) => Dashboard()));
 
-      ));
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Dashboard()
+          ),
+          ModalRoute.withName("/Dashboard")
+      );
     }
     else
     {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Error: ${resp["msg"]}'),
-        duration: const Duration(seconds: 5),
-
-      ));
+      Utility.showMsg(context,"Error: ${resp["msg"]}");
     }
   }
 }

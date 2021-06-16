@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:all_road/MyColors.dart';
+import 'package:all_road/utility.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -414,6 +415,7 @@ class PrecheckState extends State<Precheck> {
             ),
           ),
           SliverVisibility(
+            visible: trailer1_flag,
             sliver: SliverToBoxAdapter(
                 child: Container(
               color: Colors.white,
@@ -650,12 +652,54 @@ class PrecheckState extends State<Precheck> {
                               )),
                           onPressed: () {
                             bool flag = items.any((element) =>
-                                element.answer != element.myanswer);
-                            print("flag===>${flag}");
+                                element.myanswer == null);
 
+                            if(flag)
+                              {
+                                Utility.showMsg(context, 'please attend all truck questions.');
+                                return;
+                              }
+                            if(selected_truck.truck_cat=="1") {
+                              bool flag2 = trailer_items.any((element) =>
+                              element.myanswer == null);
+
+                              if (flag2) {
+                                Utility.showMsg(context,
+                                    'please attend all trailer 1 questions.');
+                                return;
+                              }
+                            }
+
+                            if(selected_truck.truck_cat=="2") {
+                              bool flag2 = trailer2_items.any((element) =>
+                              element.myanswer == null);
+
+                              if (flag2) {
+                                Utility.showMsg(context,
+                                    'please attend all trailer 2 questions.');
+                                return;
+                              }
+                            }
+
+
+                            if(upload_files.length<1)
+                              {
+                                Utility.showMsg(context, "Please select atleast one image for truck");
+                                return;
+                              }
+                            if(selected_truck.truck_cat=="1" && upload_files_trailer1.length<1)
+                            {
+                              Utility.showMsg(context, "Please select atleast one image for trailer 1");
+                              return;
+                            }
+                            if(selected_truck.truck_cat=="2" && upload_files_trailer1.length<1)
+                            {
+                              Utility.showMsg(context, "Please select atleast one image for trailer 2");
+                              return;
+                            }
                             _saveData();
                           },
-                          child: Text('Submit Test',
+                          child: Text('Submit',
                               style:
                                   TextStyle(color: Colors.white, fontSize: 16)),
                         )
@@ -770,11 +814,11 @@ class PrecheckState extends State<Precheck> {
         jsonEncode(trailer2_items.map((data) => data.toJson()).toList());
 
     bool truck_status =
-        !items.any((element) => element.answer != element.myanswer);
+        !items.any((element) => element.answer != element.myanswer && "high"==element.priority);
     bool trailer1_status =
-        !trailer_items.any((element) => element.answer != element.myanswer);
+        !trailer_items.any((element) => element.answer != element.myanswer && "high"==element.priority);
     bool trailer2_status =
-        !trailer2_items.any((element) => element.answer != element.myanswer);
+        !trailer2_items.any((element) => element.answer != element.myanswer && "high"==element.priority);
 
 
     String truck_cat = selected_truck.truck_cat;
@@ -815,7 +859,7 @@ class PrecheckState extends State<Precheck> {
         (truck_cat == "2" && truck_status && trailer1_status &&
             trailer2_status)) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: const Text('Record saved successfully!!'),
+        content: const Text('Precheck Passed!!'),
         duration: const Duration(seconds: 3),
 
       ));
@@ -827,7 +871,7 @@ class PrecheckState extends State<Precheck> {
     }
     else {
 
-     // debugger();
+      debugger();
       Map<String, dynamic> data = Map<String, dynamic>();
       data['selected_truck'] = selected_truck;
       data['selected_trailer1'] = selected_trailer1;
@@ -847,6 +891,8 @@ class PrecheckState extends State<Precheck> {
         duration: const Duration(seconds: 3),
 
       ));
+      debugger();
+
       Navigator.pushReplacement(context,
           MaterialPageRoute(
               builder: (BuildContext context) => Job(data: data)));

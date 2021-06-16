@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:all_road/MyColors.dart';
+import 'package:all_road/utility.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -307,11 +308,13 @@ class IncidentLogState extends State<IncidentLog> {
 
   Future<Null> _selectDate(BuildContext context,
       TextEditingController controller) async {
+    var date= DateTime.now();
+
     final DateTime picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2050),
+      firstDate: DateTime(date.year,date.month-6,date.day),
+      lastDate: DateTime.now(),
     );
     if (picked != null)
       setState(() {
@@ -364,6 +367,17 @@ class IncidentLogState extends State<IncidentLog> {
 
   _saveData() async {
 
+    if(reportedDate.text.isEmpty)
+      {
+        Utility.showMsg(context,"Plese select Reported date.");
+        return;
+      }
+
+    if(upload_files.length<1)
+    {
+      Utility.showMsg(context,"Plese upload atleast one incident image.");
+      return;
+    }
 
     Map<String, dynamic> data1 = Map<String, String>();
 

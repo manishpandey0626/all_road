@@ -149,14 +149,16 @@ class PreCheckQuestion {
   String option2;
   String answer;
   String myanswer;
+  String priority;
 
-  PreCheckQuestion({this.question,this.option1,this.option2,this.answer,this.myanswer});
+  PreCheckQuestion({this.question,this.option1,this.option2,this.answer,this.myanswer,this.priority});
   factory PreCheckQuestion.fromJson(Map<String, dynamic> parsedJson,{status=false}) {
     return PreCheckQuestion(
         question: parsedJson["question"] as String,
         option1: parsedJson["option_1"] as String,
         option2: parsedJson["option_2"] as String,
         answer: parsedJson["answer"] as String,
+        priority: parsedJson["priority"] as String,
         myanswer: status? parsedJson["answer"] : null
     );
   }
@@ -168,6 +170,7 @@ class PreCheckQuestion {
     "option2": option2,
     "answer": answer,
     "myanswer":myanswer,
+    "priority":priority
 
   };
 }
@@ -178,14 +181,16 @@ class TrailerQuestion {
   String option2;
   String answer;
   String myanswer;
+  String priority;
 
-  TrailerQuestion({this.question,this.option1,this.option2,this.answer,this.myanswer});
+  TrailerQuestion({this.question,this.option1,this.option2,this.answer,this.myanswer,this.priority});
   factory TrailerQuestion.fromJson(Map<String, dynamic> parsedJson,{status=false}) {
     return TrailerQuestion(
         question: parsedJson["question"] as String,
         option1: parsedJson["option_1"] as String,
         option2: parsedJson["option_2"] as String,
         answer: parsedJson["answer"] as String,
+        priority: parsedJson["priority"] as String,
         myanswer: status? parsedJson["answer"] : null
     );
   }
@@ -196,6 +201,7 @@ class TrailerQuestion {
     "option2": option2,
     "answer": answer,
     "myanswer":myanswer,
+    "priority":priority,
 
   };
 }
@@ -270,6 +276,29 @@ class Worksite
 
 }
 
+
+class Load
+{
+  String id;
+  String name;
+
+  Load(
+      {
+        this.id,
+        this.name,
+
+      });
+
+  factory Load.fromJson(Map<String, dynamic> parsedJson) {
+    return Load(
+      name: parsedJson["load_type"] as String,
+      id: parsedJson["id"] as String,
+
+
+    );
+  }
+
+}
 
 
 class JobListingData
@@ -350,16 +379,19 @@ class BreakTimeData
 {
   String id;
   String time;
+  String display_time;
   BreakTimeData(
       {
         this.id,
         this.time,
+        this.display_time,
       });
 
   factory BreakTimeData.fromJson(Map<String, dynamic> parsedJson) {
     return BreakTimeData(
       time: parsedJson["timer"] as String,
       id: parsedJson["id"] as String,
+      display_time: parsedJson["display_time"] as String,
 
 
     );

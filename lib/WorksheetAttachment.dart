@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:all_road/MyColors.dart';
+import 'package:all_road/utility.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -218,6 +219,14 @@ class WorksheetAttachmentState extends State<WorksheetAttachment> {
                           borderRadius: BorderRadius.circular(50.0),
                         )),
                     onPressed: () {
+                      bool flag = items.any((element) =>
+                      element.file == null);
+                      if(flag)
+                      {
+                     Utility.showMsg(context,"Please select all mentioned documents.");
+                        return;
+                      }
+
                       _saveData();
                     },
                     child: Text('Submit',

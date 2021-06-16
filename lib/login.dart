@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'Dashboard.dart';
@@ -36,15 +37,25 @@ class _LoginState extends State<Login> {
 
   var email= TextEditingController();
   var password= TextEditingController();
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+
+  @override
+  void initState(){
+    super.initState();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+  }
+
+  @override
+  dispose(){
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    super.dispose();
   }
 
   @override
@@ -85,7 +96,7 @@ class _LoginState extends State<Login> {
                 child: SvgPicture.asset('asset/images/logo_road.svg',
                     alignment: Alignment.topCenter,
                     width: MediaQuery.of(context).size.width,
-                    height: 150)),
+                    height: size.height*0.3)),
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
@@ -97,14 +108,14 @@ class _LoginState extends State<Login> {
                   height: 20,
                 ),
                 Container(
-
+                //    color:Colors.red,
                   alignment: Alignment.center,
                   width: size.width - 60,
-
-                    constraints: BoxConstraints(
-                      minHeight: size.height*0.6
+                  height: size.height*0.5,
+                  /*  constraints: BoxConstraints(
+                      minHeight: size.height*0.6,
                     ),
-
+*/
                  // height: 320,
                   child: Card(
 
@@ -127,7 +138,7 @@ class _LoginState extends State<Login> {
                           email, "E-Mail Address", "E-Mail Address", "Invalid mail id"),
                      _getInputText(password, "Password", "Password", "Invalid Password Id",obscureText: true),
                       Padding(
-                        padding: EdgeInsets.only(top: 60.0,bottom:20),
+                        padding: EdgeInsets.only(top: 20.0,bottom:20),
                         child: Container(
                             child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
@@ -172,11 +183,13 @@ class _LoginState extends State<Login> {
         child: TextFormField(
           controller: controller,
           obscureText: obscureText,
-
+          maxLength: 1000,
           decoration: InputDecoration(
            /* hintStyle: TextStyle(
                 color: Theme.of(context).primaryColor),*/
             hintText: hint,
+            counterStyle: TextStyle(color:Colors.transparent)
+
 
           ),
           validator: (value) {
@@ -209,7 +222,8 @@ data['password']=password.text;
     {
       var data=response_data["data"];
       var testStatus=data["result"];
-      SessionManager.createSession(data["id"] ,data["first_name"],testStatus);
+
+      SessionManager.createSession(data["id"] ,data["first_name"],testStatus,data["licence_no"] ,data["licence_expiry"],data["commietment_date"] ,data["cat_img5"]);
       if("Y"==testStatus) {
         _getJobStatus();
       }
