@@ -12,6 +12,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'Dashboard.dart';
 import 'DataClasses.dart';
 import 'SessionManager.dart';
 import 'api.dart';
@@ -63,15 +64,14 @@ class DriverTestState extends State<DriverTest> {
       appBar: AppBar(
         backgroundColor: MyColors.myCustomGreen,
         elevation: 0.0,
-        title: Align(
-            alignment: Alignment.center,
-            child: Text(
-              "Induction",
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .headline1,
-            )),
+        centerTitle: true,
+        title: Text(
+          "Induction",
+          style: Theme
+              .of(context)
+              .textTheme
+              .headline1,
+        ),
         actions: [
           /*GestureDetector(
             onTap: ()
@@ -347,8 +347,8 @@ _updateTestStatus() async
       duration: const Duration(seconds: 5),
 
     ));
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (BuildContext context) => Job()));
+    Navigator.pushReplacement(context,
+        MaterialPageRoute(builder: (BuildContext context) => Dashboard()));
   }
 }
 }

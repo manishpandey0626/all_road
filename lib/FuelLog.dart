@@ -58,6 +58,7 @@ class FuelLogState extends State<FuelLog> {
       appBar: AppBar(
         backgroundColor: MyColors.myCustomGreen,
         elevation: 0.0,
+        centerTitle: true,
         title: Align(
             alignment: Alignment.center,
             child: Text(
@@ -159,16 +160,73 @@ class FuelLogState extends State<FuelLog> {
 
                           SizedBox(height: 20),
                           Container(
-                            height: 50,
-                            child: ListView(
+                            height: 100,
+                            child: ListView.builder(
+
                                 scrollDirection: Axis.horizontal,
-                                children: upload_files.map((File file) {
-                                  return Image.file(
-                                    File(file.path),
-                                    width: 50,
-                                    height: 50,
+                                itemCount: upload_files.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Stack(
+                                    children: [
+                                      Container(
+                                        width: 100,
+                                        height:100,
+                                        clipBehavior: Clip.hardEdge,
+                                        decoration: BoxDecoration(
+                                            color:Colors.grey[400],
+                                            //border: Border.all(color: Colors.grey[700]),
+                                            borderRadius: BorderRadius.circular(4)
+                                        ),
+                                        margin: EdgeInsets.symmetric(horizontal: 8),
+
+                                        child: Image.file(
+                                          File(upload_files[index].path),
+                                          fit: BoxFit.contain,
+
+                                        ),
+                                      ),
+                                      Positioned(
+                                        right:10,
+                                        top:5,
+                                        child:
+                                        GestureDetector(
+                                          onTap: (){
+
+                                            setState(() {
+                                              upload_files.removeAt(index);
+                                            });
+                                          },
+                                          child: Container(
+                                            margin: EdgeInsets.all(1),
+                                            padding:EdgeInsets.all(2),
+                                            decoration:BoxDecoration(
+                                                gradient: LinearGradient(
+                                                  colors: [
+                                                    Colors.red[900],
+                                                    Colors.red[500],
+                                                    // Color(0x00000000)
+                                                  ],
+                                                  begin: Alignment.bottomCenter,
+                                                  end: Alignment.topCenter,
+                                                ),
+                                                borderRadius: BorderRadius.circular(50)
+                                            ),
+                                            //  color:Colors.yellow,
+                                            child:
+                                            Icon(
+
+                                              Icons.close,
+                                              color: Colors.white,
+                                              size: 16.0,
+
+                                            ),
+                                          ),
+                                        ),
+                                      )
+
+                                    ],
                                   );
-                                }).toList()),
+                                }),
                           )
                         ],
                       )))),

@@ -75,208 +75,210 @@ class BreakState extends State<Break> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: MyColors.myCustomGreen,
-      //drawer: MyDrawer(),
-      appBar: AppBar(
+    return WillPopScope(
+      onWillPop: () async => break_expire && precheck_status == "Y",
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: MyColors.myCustomGreen,
-        elevation: 0.0,
-        title: Align(
-            alignment: Alignment.center,
-            child: Text(
-              "Break",
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .headline1,
-            )),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            tooltip: 'Refresh',
-            onPressed: () {
-              _getBreakStatus();
-            },
+        //drawer: MyDrawer(),
+        appBar: AppBar(
+          backgroundColor: MyColors.myCustomGreen,
+          elevation: 0.0,
+          centerTitle: true,
+          title: Text(
+            "Break",
+            style: Theme
+                .of(context)
+                .textTheme
+                .headline1,
           ),
-        ],
-
-      ),
-      body: SafeArea(
-          child: CustomScrollView( slivers: [
-          SliverToBoxAdapter(
-          child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                SizedBox(
-                  height: 10,
-                ),
-                Stack(children: [
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: Padding(
-                      padding: EdgeInsets.only(right: 10),
-                      child: SvgPicture.asset(
-                        'asset/images/coffee_break_bro.svg',
-                        alignment: Alignment.bottomRight,
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width,
-                        height: 150,
-                      ),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Give Yourself a Break",
-                              style: Theme
-                                  .of(context)
-                                  .textTheme
-                                  .headline2,
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Text(
-                              "Select one option",
-                              style: Theme
-                                  .of(context)
-                                  .textTheme
-                                  .headline3,
-                            ),
-                          ]),
-                    ),
-                  )
-                ]),
-                SizedBox(
-                  height: 10,
-                )
-              ])),
-      SliverToBoxAdapter(
-          child: Container(
-            height: 50,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.refresh),
+              tooltip: 'Refresh',
+              onPressed: () {
+                _getBreakStatus();
+              },
             ),
-          )),
-      SliverToBoxAdapter(
-          child: Container(
-              color: Colors.white,
-              padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
-              child: Container(
-                  padding:
-                  EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                  decoration: BoxDecoration(
-                    color: MyColors.greyBackground,
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
+          ],
+
+        ),
+        body: SafeArea(
+            child: CustomScrollView( slivers: [
+            SliverToBoxAdapter(
+            child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SizedBox(
+                    height: 10,
                   ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      _getInputText(truckId, "Truck No", "Truck No", "",
-                          is_enable: false),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: DropdownButtonFormField<BreakTimeData>(
-                          decoration: InputDecoration(
-                            isDense: true,
-                            labelText: "Break Time",
-                            focusedBorder: UnderlineInputBorder(
-                                borderSide:
-                                BorderSide(color: Color(0xff009933))),
-                          ),
-                          validator: (value) =>
-                          value == null ? "Please Select Break Time" : null,
-                          value: selected_time,
-                          onChanged:break_expire? (BreakTimeData Value) {
-                            setState(() {
-                              selected_time = Value;
-                            });
-                          }:null,
-                          items: breaktimes.map((BreakTimeData breaktime) {
-                            return DropdownMenuItem<BreakTimeData>(
-                              value: breaktime,
-                              child: Row(
-                                children: <Widget>[
-                                  Text(
-                                    breaktime.display_time,
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }).toList(),
+                  Stack(children: [
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: Padding(
+                        padding: EdgeInsets.only(right: 10),
+                        child: SvgPicture.asset(
+                          'asset/images/coffee_break_bro.svg',
+                          alignment: Alignment.bottomRight,
+                          width: MediaQuery
+                              .of(context)
+                              .size
+                              .width,
+                          height: 150,
                         ),
                       ),
-
-                    ],
-                  )))),
-            SliverToBoxAdapter(
-
-                child: Container(
-                  color: Colors.white,
-                  child: Padding(
-                    padding: EdgeInsets.all(20),
-                    child: Column(
-                        children:[
-                          Visibility(
-                            visible: !break_expire || precheck_status=="Y",
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  padding: EdgeInsets.fromLTRB(50, 15, 50, 15),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(50.0),
-                                  )),
-                              onPressed: break_expire?() {
-                                //  _saveData();
-                                showAlertDialog(context);
-                              }:null,
-                              child: Text('Take a Break',
-                                  style: TextStyle(color: Colors.white, fontSize: 16)),
-                            ),
-                          ),
-                          Visibility(
-                            visible: break_expire && precheck_status=="N",
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  padding: EdgeInsets.fromLTRB(50, 15, 50, 15),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(50.0),
-                                  )),
-                              onPressed: () {
-                                _precheck();
-                              },
-                              child: Text('Precheck',
-                                  style: TextStyle(color: Colors.white, fontSize: 16)),
-                            ),
-                          ),]
                     ),
-                  ),
-                )
-            ),
-      SliverFillRemaining(
-        hasScrollBody: false,
-        child: Container(
-          color: Colors.white,
-          child: Padding(
-            padding: EdgeInsets.all(20),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Give Yourself a Break",
+                                style: Theme
+                                    .of(context)
+                                    .textTheme
+                                    .headline2,
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Text(
+                                "Select one option",
+                                style: Theme
+                                    .of(context)
+                                    .textTheme
+                                    .headline3,
+                              ),
+                            ]),
+                      ),
+                    )
+                  ]),
+                  SizedBox(
+                    height: 10,
+                  )
+                ])),
+        SliverToBoxAdapter(
+            child: Container(
+              height: 50,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+              ),
+            )),
+        SliverToBoxAdapter(
+            child: Container(
+                color: Colors.white,
+                padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
+                child: Container(
+                    padding:
+                    EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                    decoration: BoxDecoration(
+                      color: MyColors.greyBackground,
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        _getInputText(truckId, "Truck No", "Truck No", "",
+                            is_enable: false),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20),
+                          child: DropdownButtonFormField<BreakTimeData>(
+                            decoration: InputDecoration(
+                              isDense: true,
+                              labelText: "Break Time",
+                              focusedBorder: UnderlineInputBorder(
+                                  borderSide:
+                                  BorderSide(color: Color(0xff009933))),
+                            ),
+                            validator: (value) =>
+                            value == null ? "Please Select Break Time" : null,
+                            value: selected_time,
+                            onChanged:break_expire? (BreakTimeData Value) {
+                              setState(() {
+                                selected_time = Value;
+                              });
+                            }:null,
+                            items: breaktimes.map((BreakTimeData breaktime) {
+                              return DropdownMenuItem<BreakTimeData>(
+                                value: breaktime,
+                                child: Row(
+                                  children: <Widget>[
+                                    Text(
+                                      breaktime.display_time,
+                                      style: TextStyle(color: Colors.black),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ),
 
+                      ],
+                    )))),
+              SliverToBoxAdapter(
+
+                  child: Container(
+                    color: Colors.white,
+                    child: Padding(
+                      padding: EdgeInsets.all(20),
+                      child: Column(
+                          children:[
+                            Visibility(
+                              visible: !break_expire || precheck_status=="Y",
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    padding: EdgeInsets.fromLTRB(50, 15, 50, 15),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(50.0),
+                                    )),
+                                onPressed: break_expire?() {
+                                  //  _saveData();
+                                  showAlertDialog(context);
+                                }:null,
+                                child: Text('Take a Break',
+                                    style: TextStyle(color: Colors.white, fontSize: 16)),
+                              ),
+                            ),
+                            Visibility(
+                              visible: break_expire && precheck_status=="N",
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    padding: EdgeInsets.fromLTRB(50, 15, 50, 15),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(50.0),
+                                    )),
+                                onPressed: () {
+                                  _precheck();
+                                },
+                                child: Text('Precheck',
+                                    style: TextStyle(color: Colors.white, fontSize: 16)),
+                              ),
+                            ),]
+                      ),
+                    ),
+                  )
+              ),
+        SliverFillRemaining(
+          hasScrollBody: false,
+          child: Container(
+            color: Colors.white,
+            child: Padding(
+              padding: EdgeInsets.all(20),
+
+            ),
           ),
         ),
-      ),
 
-    ]),
-    ),
+      ]),
+      ),
+      ),
     );
     }
 
@@ -353,18 +355,22 @@ class BreakState extends State<Break> with WidgetsBindingObserver {
   }
 
   _getBreakTimes() async {
-    Map<String, dynamic> data = Map<String, dynamic>();
-    data["act"] = "GET_BREAK_TIME";
-    final response = await API.postData(data);
+    Map<String, dynamic> post_data = Map<String, dynamic>();
+    post_data["act"] = "GET_BREAK_TIME";
+    final response = await API.postData(post_data);
 
     //debugger();
     var response_data = json.decode(response.body);
     if (this.mounted) {
       setState(() {
         Iterable list = response_data["data"];
-        //  debugger();
+     //    debugger();
         breaktimes =
             list.map((model) => BreakTimeData.fromJson(model)).toList();
+
+        if (data['time'] != null) {
+          selected_time = breaktimes.singleWhere((element) => element.time ==data['time']  );
+        }
       });
     }
   }

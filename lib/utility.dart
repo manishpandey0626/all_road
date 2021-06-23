@@ -12,4 +12,33 @@ static showMsg(BuildContext context,String msg)
   ));
 
 }
+
+
+static Future<bool>  onBackPressed(BuildContext context) {
+  return showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: Text('Are you sure?'),
+        content: Text('Do you want to exit an App'),
+        actions: <Widget>[
+          TextButton(
+            child: Text('No'),
+            onPressed: () {
+              return Future.value(false);
+            //  Navigator.of(context).pop(false);
+            },
+          ),
+          TextButton(
+            child: Text('Yes'),
+            onPressed: () {
+              //Navigator.of(context).pop(true);
+              return Future.value(true);
+            },
+          )
+        ],
+      );
+    },
+  ) ?? false;
+}
 }

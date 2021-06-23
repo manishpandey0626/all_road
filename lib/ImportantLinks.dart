@@ -57,12 +57,11 @@ class ImportantLinksState extends State<ImportantLinks> {
       appBar: AppBar(
         backgroundColor: MyColors.myCustomGreen,
         elevation: 0.0,
-        title: Align(
-            alignment: Alignment.center,
-            child: Text(
-              "Important Links",
-              style: Theme.of(context).textTheme.headline1,
-            )),
+        centerTitle: true,
+        title: Text(
+          "Important Links",
+          style: Theme.of(context).textTheme.headline1,
+        ),
         actions: [
           /*GestureDetector(
             onTap: ()

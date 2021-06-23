@@ -40,12 +40,11 @@ class InductionState extends State<Induction> {
       appBar: AppBar(
         backgroundColor: MyColors.myCustomGreen,
         elevation: 0.0,
-        title: Align(
-            alignment: Alignment.center,
-            child: Text(
-              "Induction",
-              style: Theme.of(context).textTheme.headline1,
-            )),
+        centerTitle: true,
+        title: Text(
+          "Induction",
+          style: Theme.of(context).textTheme.headline1,
+        ),
         actions: [
           /*GestureDetector(
             onTap: ()

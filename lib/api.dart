@@ -3,8 +3,8 @@ import 'dart:developer';
 
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
-const baseUrl = "https://websnt.xyz/all_road/api/index.php?";
-const imageUrl="https://websnt.xyz/all_road/productsImages/";
+const baseUrl = "http://allroadtransportportal.com/api/index.php?";
+const imageUrl="http://allroadtransportportal.com/productsImages/";
 
 
 

@@ -49,12 +49,11 @@ class VideoState extends State<Video> {
       appBar: AppBar(
         backgroundColor: MyColors.myCustomGreen,
         elevation: 0.0,
-        title: Align(
-            alignment: Alignment.center,
-            child: Text(
-              "Videos",
-              style: Theme.of(context).textTheme.headline1,
-            )),
+        centerTitle: true,
+        title: Text(
+          "Videos",
+          style: Theme.of(context).textTheme.headline1,
+        ),
         actions: [
           /*GestureDetector(
             onTap: ()

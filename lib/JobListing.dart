@@ -58,12 +58,11 @@ class JobListingState extends State<JobListing> {
       appBar: AppBar(
         backgroundColor: MyColors.myCustomGreen,
         elevation: 0.0,
-        title: Align(
-            alignment: Alignment.center,
-            child: Text(
-              "Job Listing",
-              style: Theme.of(context).textTheme.headline1,
-            )),
+        centerTitle: true,
+        title: Text(
+          "Job Listing",
+          style: Theme.of(context).textTheme.headline1,
+        ),
         actions: [
 
         ],

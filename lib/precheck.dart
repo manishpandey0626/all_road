@@ -7,6 +7,7 @@ import 'package:all_road/utility.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'DataClasses.dart';
@@ -34,6 +35,7 @@ class PrecheckState extends State<Precheck> {
   List<PreCheckQuestion> items = [];
   List<TrailerQuestion> trailer_items = [];
   List<TrailerQuestion> trailer2_items = [];
+  List<Declaration> declaration_items = [];
   List<String> banners = [];
   String cat_name;
   int item_cnt = 0;
@@ -53,6 +55,8 @@ class PrecheckState extends State<Precheck> {
   bool truck_precheck_status = false;
   bool trailer1_precheck_status = false;
   bool trailer2_precheck_status = false;
+
+  bool submit_btn_flag=false;
 
   @override
   void initState() {
@@ -103,6 +107,8 @@ class PrecheckState extends State<Precheck> {
     // cat_name = data["cat_name"];
 
     _getTrailerQuestion("act=GET_PRECHECK_TRAILER_QUES");
+    
+    _getDeclaration("act=GET_DECLARATION");
     /* _getBanners("act=GET_BANNER&cat_id=" + data["cat_id"]);*/
   }
 
@@ -117,15 +123,14 @@ class PrecheckState extends State<Precheck> {
       appBar: AppBar(
         backgroundColor: MyColors.myCustomGreen,
         elevation: 0.0,
-        title: Align(
-            alignment: Alignment.center,
-            child: Text(
-              "Pre Check",
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .headline1,
-            )),
+        centerTitle: true,
+        title: Text(
+          "Pre Check",
+          style: Theme
+              .of(context)
+              .textTheme
+              .headline1,
+        ),
 
         // backgroundColor: Color(0xFFecf7ef),
       ),
@@ -321,16 +326,73 @@ class PrecheckState extends State<Precheck> {
                     ),
                     SizedBox(height: 20),
                     Container(
-                      height: 60,
-                      child: ListView(
+                      height: 100,
+                      child: ListView.builder(
+
                           scrollDirection: Axis.horizontal,
-                          children: upload_files.map((File file) {
-                            return Image.file(
-                              File(file.path),
-                              width: 50,
-                              height: 50,
+                          itemCount: upload_files.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Stack(
+                              children: [
+                                Container(
+                                  width: 100,
+                                  height:100,
+                                  clipBehavior: Clip.hardEdge,
+                                  decoration: BoxDecoration(
+                                      color:Colors.grey[400],
+                                      //border: Border.all(color: Colors.grey[700]),
+                                    borderRadius: BorderRadius.circular(4)
+                                  ),
+                                  margin: EdgeInsets.symmetric(horizontal: 8),
+
+                                  child: Image.file(
+                                    File(upload_files[index].path),
+                                    fit: BoxFit.contain,
+
+                                  ),
+                                ),
+                                Positioned(
+                                  right:10,
+                                  top:2,
+                                  child:
+                                  GestureDetector(
+                                    onTap: (){
+
+                                      setState(() {
+                                        upload_files.removeAt(index);
+                                      });
+                                    },
+                                    child: Container(
+                                      margin: EdgeInsets.all(1),
+                                      padding:EdgeInsets.all(2),
+                                      decoration:BoxDecoration(
+                                          gradient: LinearGradient(
+                                            colors: [
+                                              Colors.red[900],
+                                              Colors.red[500],
+                                              // Color(0x00000000)
+                                            ],
+                                            begin: Alignment.bottomCenter,
+                                            end: Alignment.topCenter,
+                                          ),
+                                    borderRadius: BorderRadius.circular(50)
+                                    ),
+                              //  color:Colors.yellow,
+                                      child:
+                                      Icon(
+
+                                        Icons.close,
+                                        color: Colors.white,
+                                        size: 16.0,
+
+                                      ),
+                                    ),
+                                  ),
+                                )
+
+                              ],
                             );
-                          }).toList()),
+                          }),
                     )
                   ])),
             ),
@@ -472,16 +534,73 @@ class PrecheckState extends State<Precheck> {
                       ),
                       SizedBox(height: 20),
                       Container(
-                        height: 60,
-                        child: ListView(
+                        height: 100,
+                        child: ListView.builder(
+
                             scrollDirection: Axis.horizontal,
-                            children: upload_files_trailer1.map((File file) {
-                              return Image.file(
-                                File(file.path),
-                                width: 50,
-                                height: 50,
+                            itemCount: upload_files_trailer1.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Stack(
+                                children: [
+                                  Container(
+                                    width: 100,
+                                    height:100,
+                                    clipBehavior: Clip.hardEdge,
+                                    decoration: BoxDecoration(
+                                        color:Colors.grey[400],
+                                        //border: Border.all(color: Colors.grey[700]),
+                                        borderRadius: BorderRadius.circular(4)
+                                    ),
+                                    margin: EdgeInsets.symmetric(horizontal: 8),
+
+                                    child: Image.file(
+                                      File(upload_files_trailer1[index].path),
+                                      fit: BoxFit.contain,
+
+                                    ),
+                                  ),
+                                  Positioned(
+                                    right:10,
+                                    top:2,
+                                    child:
+                                    GestureDetector(
+                                      onTap: (){
+
+                                        setState(() {
+                                          upload_files_trailer1.removeAt(index);
+                                        });
+                                      },
+                                      child: Container(
+                                        margin: EdgeInsets.all(1),
+                                        padding:EdgeInsets.all(2),
+                                        decoration:BoxDecoration(
+                                            gradient: LinearGradient(
+                                              colors: [
+                                                Colors.red[900],
+                                                Colors.red[500],
+                                                // Color(0x00000000)
+                                              ],
+                                              begin: Alignment.bottomCenter,
+                                              end: Alignment.topCenter,
+                                            ),
+                                            borderRadius: BorderRadius.circular(50)
+                                        ),
+                                        //  color:Colors.yellow,
+                                        child:
+                                        Icon(
+
+                                          Icons.close,
+                                          color: Colors.white,
+                                          size: 16.0,
+
+                                        ),
+                                      ),
+                                    ),
+                                  )
+
+                                ],
                               );
-                            }).toList()),
+                            }),
                       )
                     ])),
               ),
@@ -624,21 +743,126 @@ class PrecheckState extends State<Precheck> {
                       ),
                       SizedBox(height: 20),
                       Container(
-                        height: 60,
-                        child: ListView(
+                        height: 100,
+                        child: ListView.builder(
+
                             scrollDirection: Axis.horizontal,
-                            children: upload_files_trailer2.map((File file) {
-                              return Image.file(
-                                File(file.path),
-                                width: 50,
-                                height: 50,
+                            itemCount: upload_files_trailer2.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Stack(
+                                children: [
+                                  Container(
+                                    width: 100,
+                                    height:100,
+                                    clipBehavior: Clip.hardEdge,
+                                    decoration: BoxDecoration(
+                                        color:Colors.grey[400],
+                                        //border: Border.all(color: Colors.grey[700]),
+                                        borderRadius: BorderRadius.circular(4)
+                                    ),
+                                    margin: EdgeInsets.symmetric(horizontal: 8),
+
+                                    child: Image.file(
+                                      File(upload_files_trailer2[index].path),
+                                      fit: BoxFit.contain,
+
+                                    ),
+                                  ),
+                                  Positioned(
+                                    right:10,
+                                    top:2,
+                                    child:
+                                    GestureDetector(
+                                      onTap: (){
+
+                                        setState(() {
+                                          upload_files_trailer2.removeAt(index);
+                                        });
+                                      },
+                                      child: Container(
+                                        margin: EdgeInsets.all(1),
+                                        padding:EdgeInsets.all(2),
+                                        decoration:BoxDecoration(
+                                            gradient: LinearGradient(
+                                              colors: [
+                                                Colors.red[900],
+                                                Colors.red[500],
+                                                // Color(0x00000000)
+                                              ],
+                                              begin: Alignment.bottomCenter,
+                                              end: Alignment.topCenter,
+                                            ),
+                                            borderRadius: BorderRadius.circular(50)
+                                        ),
+                                        //  color:Colors.yellow,
+                                        child:
+                                        Icon(
+
+                                          Icons.close,
+                                          color: Colors.white,
+                                          size: 16.0,
+
+                                        ),
+                                      ),
+                                    ),
+                                  )
+
+                                ],
                               );
-                            }).toList()),
+                            }),
                       )
                     ])),
               ),
             )),
           ),
+          SliverToBoxAdapter(
+              child: Container(
+                  color: Colors.grey[400],
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: Text("Driver Declaration",
+                      style: Theme.of(context).textTheme.headline1))),
+        SliverList(
+
+          delegate:
+          SliverChildBuilderDelegate((BuildContext context, int index) {
+            return GestureDetector(
+                onTap: () {},
+                child: Container(
+                    color: Colors.white,
+                    padding:
+                    EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    child: Container(
+                      padding:
+                      EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: MyColors.greyBackground,
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                      ),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Checkbox(value: declaration_items[index].flag, onChanged: (value)
+                                {
+                                  setState(() {
+                                    declaration_items[index].flag=value;
+                                    submit_btn_flag = !declaration_items.any((element) => !element.flag);
+                                  });
+
+                                }),
+                                SizedBox(width: 10),
+                                Expanded(
+                                    child: Text(declaration_items[index].question))
+                              ],
+                            ),
+                          ]),
+                    )));
+          }, childCount: declaration_items.length),
+        ),
           SliverToBoxAdapter(
               child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -650,7 +874,7 @@ class PrecheckState extends State<Precheck> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(50.0),
                               )),
-                          onPressed: () {
+                          onPressed:submit_btn_flag? ()  {
                             bool flag = items.any((element) =>
                                 element.myanswer == null);
 
@@ -692,13 +916,13 @@ class PrecheckState extends State<Precheck> {
                               Utility.showMsg(context, "Please select atleast one image for trailer 1");
                               return;
                             }
-                            if(selected_truck.truck_cat=="2" && upload_files_trailer1.length<1)
+                            if(selected_truck.truck_cat=="2" && upload_files_trailer2.length<1)
                             {
                               Utility.showMsg(context, "Please select atleast one image for trailer 2");
                               return;
                             }
                             _saveData();
-                          },
+                          }:null,
                           child: Text('Submit',
                               style:
                                   TextStyle(color: Colors.white, fontSize: 16)),
@@ -751,6 +975,23 @@ class PrecheckState extends State<Precheck> {
     }
   }
 
+  _getDeclaration(String url) async {
+    final response = await API.getData(url);
+
+    //debugger();
+    var response_data = json.decode(response.body);
+    if (this.mounted) {
+      setState(() {
+        Iterable list = response_data["data"];
+        declaration_items = list
+            .map((model) => Declaration.fromJson(model,
+            status: trailer1_precheck_status))
+            .toList();
+     
+      });
+    }
+  }
+
   Future getImageFromCamera({type: "truck"}) async {
     final pickedFile = await _picker.getImage(
       source: ImageSource.camera,
@@ -760,16 +1001,17 @@ class PrecheckState extends State<Precheck> {
       if (pickedFile != null) {
         File file = File(pickedFile.path);
         var lastSeparator = pickedFile.path.lastIndexOf(Platform.pathSeparator);
+        var file_name=pickedFile.path.substring(lastSeparator + 1,pickedFile.path.length);
         var newPath = pickedFile.path.substring(0, lastSeparator + 1);
         if (type == "trailer1") {
           upload_files_trailer1.add(file.renameSync(
-              newPath + "trailer1_${upload_files_trailer1.length}"));
+              newPath + "trailer1_${upload_files_trailer1.length}_$file_name"));
         } else if (type == "trailer2") {
           upload_files_trailer2.add(file.renameSync(
-              newPath + "trailer2_${upload_files_trailer2.length}"));
+              newPath + "trailer2_${upload_files_trailer2.length}_$file_name"));
         } else {
           upload_files.add(file
-              .renameSync(newPath + "truck_${upload_files.length}"));
+              .renameSync(newPath + "truck_${upload_files.length}_$file_name"));
         }
       } else {
         print('No image selected.');
@@ -778,25 +1020,30 @@ class PrecheckState extends State<Precheck> {
   }
 
   Future getImageFromGallery({type = 'truck'}) async {
+
+
     final pickedFile = await _picker.getImage(
       source: ImageSource.gallery,
     );
 
     setState(() {
+
       if (pickedFile != null) {
+      //  debugger();
         File file = File(pickedFile.path);
         var lastSeparator = pickedFile.path.lastIndexOf(Platform.pathSeparator);
         var newPath = pickedFile.path.substring(0, lastSeparator + 1);
+        var file_name=pickedFile.path.substring(lastSeparator + 1,pickedFile.path.length);
 
         if (type == "trailer1") {
           upload_files_trailer1.add(file.renameSync(
-              newPath + "trailer1_${upload_files_trailer1.length}"));
+              newPath + "trailer1_${upload_files_trailer1.length}_$file_name"));
         } else if (type == "trailer2") {
           upload_files_trailer2.add(file.renameSync(
-              newPath + "trailer2_${upload_files_trailer2.length}"));
+              newPath + "trailer2_${upload_files_trailer2.length}_$file_name"));
         } else {
           upload_files.add(file
-              .renameSync(newPath + "truck_${upload_files.length}"));
+              .renameSync(newPath + "truck_${upload_files.length}_$file_name"));
         }
       } else {
         print('No image selected.');
@@ -814,11 +1061,11 @@ class PrecheckState extends State<Precheck> {
         jsonEncode(trailer2_items.map((data) => data.toJson()).toList());
 
     bool truck_status =
-        !items.any((element) => element.answer != element.myanswer && "high"==element.priority);
+        !items.any((element) => element.answer != element.myanswer);
     bool trailer1_status =
-        !trailer_items.any((element) => element.answer != element.myanswer && "high"==element.priority);
+        !trailer_items.any((element) => element.answer != element.myanswer);
     bool trailer2_status =
-        !trailer2_items.any((element) => element.answer != element.myanswer && "high"==element.priority);
+        !trailer2_items.any((element) => element.answer != element.myanswer);
 
 
     String truck_cat = selected_truck.truck_cat;
@@ -843,7 +1090,7 @@ class PrecheckState extends State<Precheck> {
   data["trailer1_status"]=trailer1_status.toString();
   data["trailer2_status"]=trailer2_status.toString();
   data["truck_cat"]=truck_cat;
-
+//debugger();
  List<String> paths=[];
  paths.addAll(upload_files.map((file)=>file.path));
  paths.addAll(upload_files_trailer1.map((file)=>file.path));
@@ -865,13 +1112,23 @@ class PrecheckState extends State<Precheck> {
       ));
       Map<String, dynamic> data = Map<String, dynamic>();
       data['job_id'] = resp["job_id"];
-      Navigator.pushReplacement(context,
+      data['start_km']=selected_truck.total_run;
+
+  /*    Navigator.pushReplacement(context,
           MaterialPageRoute(
-              builder: (BuildContext context) => JobDetail(data: data)));
+              builder: (BuildContext context) => JobDetail(data: data)));*/
+
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+              builder: (context) => JobDetail(data: data)
+          ),
+              (Route<dynamic> route) => false
+      );
     }
     else {
 
-      debugger();
+   //   debugger();
       Map<String, dynamic> data = Map<String, dynamic>();
       data['selected_truck'] = selected_truck;
       data['selected_trailer1'] = selected_trailer1;
@@ -891,11 +1148,19 @@ class PrecheckState extends State<Precheck> {
         duration: const Duration(seconds: 3),
 
       ));
-      debugger();
+     // debugger();
 
-      Navigator.pushReplacement(context,
+    /*  Navigator.pushReplacement(context,
           MaterialPageRoute(
-              builder: (BuildContext context) => Job(data: data)));
+              builder: (BuildContext context) => Job(data: data)));*/
+
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Job(data: data)
+          ),
+              (Route<dynamic> route) => false
+      );
 
       //}
       //}
@@ -910,4 +1175,6 @@ class PrecheckState extends State<Precheck> {
       ));
     }
     }
+
+
 }

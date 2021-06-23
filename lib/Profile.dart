@@ -54,12 +54,11 @@ Map<String,dynamic> user_data=null;
       appBar: AppBar(
         backgroundColor: MyColors.myCustomGreen,
         elevation: 0.0,
-        title: Align(
-            alignment: Alignment.center,
-            child: Text(
-              "Profile",
-              style: Theme.of(context).textTheme.headline1,
-            )),
+        centerTitle: true,
+        title: Text(
+          "Profile",
+          style: Theme.of(context).textTheme.headline1,
+        ),
       ),
       body: SafeArea(
         child: CustomScrollView(controller: _scrollController, slivers: [
@@ -198,12 +197,16 @@ Map<String,dynamic> user_data=null;
 
 _getDriverData() async
 {
-   user_data= await SessionManager.getUserDetails();
-driver_name=user_data[SessionManager.driverName];
-licence_no=user_data[SessionManager.licence_no];
-licence_expiry=user_data[SessionManager.licence_expiry];
-commencement_date=user_data[SessionManager.commencement];
-profile_img=user_data[SessionManager.profile_img];
+  user_data= await SessionManager.getUserDetails();
+  setState(() {
+
+    driver_name=user_data[SessionManager.driverName];
+    licence_no=user_data[SessionManager.licence_no];
+    licence_expiry=user_data[SessionManager.licence_expiry];
+    commencement_date=user_data[SessionManager.commencement];
+    profile_img=user_data[SessionManager.profile_img];
+  });
+
 
 }
 }

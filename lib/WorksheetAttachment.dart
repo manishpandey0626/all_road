@@ -56,20 +56,19 @@ class WorksheetAttachmentState extends State<WorksheetAttachment> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: MyColors.myCustomGreen,
+      backgroundColor: Colors.white,
       //drawer: MyDrawer(),
       appBar: AppBar(
         backgroundColor: MyColors.myCustomGreen,
         elevation: 0.0,
-        title: Align(
-            alignment: Alignment.center,
-            child: Text(
-              "Worksheet",
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .headline1,
-            )),
+        centerTitle: true,
+        title: Text(
+          "Worksheet",
+          style: Theme
+              .of(context)
+              .textTheme
+              .headline1,
+        ),
         actions: [
         ],
         // backgroundColor: Color(0xFFecf7ef),
@@ -77,60 +76,63 @@ class WorksheetAttachmentState extends State<WorksheetAttachment> {
       body: SafeArea(
         child: CustomScrollView(controller: _scrollController, slivers: [
           SliverToBoxAdapter(
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Stack(children: [
-                      Align(
-                        alignment: Alignment.bottomRight,
-                        child: Padding(
-                          padding: EdgeInsets.only(right: 10),
-                          child: SvgPicture.asset(
-                            'asset/images/add_file_bro.svg',
-                            alignment: Alignment.bottomRight,
-                            width: MediaQuery
-                                .of(context)
-                                .size
-                                .width,
-                            height: 150,
+              child: Container(
+                color: MyColors.myCustomGreen,
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Stack(children: [
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: Padding(
+                            padding: EdgeInsets.only(right: 10),
+                            child: SvgPicture.asset(
+                              'asset/images/add_file_bro.svg',
+                              alignment: Alignment.bottomRight,
+                              width: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width,
+                              height: 150,
+                            ),
                           ),
                         ),
-                      ),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Padding(
-                          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "",
-                                  style: Theme
-                                      .of(context)
-                                      .textTheme
-                                      .headline2,
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Text(
-                                  "Collect all types  \ndocuments",
-                                  style: Theme
-                                      .of(context)
-                                      .textTheme
-                                      .headline3,
-                                ),
-                              ]),
-                        ),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "",
+                                    style: Theme
+                                        .of(context)
+                                        .textTheme
+                                        .headline2,
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Text(
+                                    "Collect all types  \ndocuments",
+                                    style: Theme
+                                        .of(context)
+                                        .textTheme
+                                        .headline3,
+                                  ),
+                                ]),
+                          ),
+                        )
+                      ]),
+                      SizedBox(
+                        height: 10,
                       )
                     ]),
-                    SizedBox(
-                      height: 10,
-                    )
-                  ])),
+              )),
           SliverToBoxAdapter(
               child: Container(
                 decoration: BoxDecoration(
@@ -145,6 +147,7 @@ class WorksheetAttachmentState extends State<WorksheetAttachment> {
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               childAspectRatio: 1,
+
               //mainAxisSpacing: 1,
               // crossAxisSpacing: 1,
             ),
@@ -152,30 +155,151 @@ class WorksheetAttachmentState extends State<WorksheetAttachment> {
                   (BuildContext context, int index) {
                 return GestureDetector(
                     onTap: () {
-                      getImageFromGallery(index);
+                      //getImageFromGallery(index);
+                      showModalBottomSheet<void>(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Container(
+                              height: 150,
+                              color: Colors.grey[50],
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  //mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    SizedBox(height:8),
+                                    Material(
+
+                                      child: InkWell(
+
+                                        onTap: (){
+                                          Navigator.pop(context);
+                                          getImageFromGallery(index);
+                                        },
+
+                                        child: Container(
+                                          //color: Colors.transparent,
+                                          padding:EdgeInsets.symmetric(horizontal: 16,vertical: 16),
+                                          child: Row(
+                                              children:[
+                                                Icon(Icons.image,
+                                                color:Colors.grey[700]),
+                                                SizedBox(width:16),
+                                                Text("Gallery",style: TextStyle(color:Colors.grey[700],fontSize: 18),)
+                                              ]
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                      SizedBox(height:8),
+                                      Material(
+                                        child: InkWell(
+                                          onTap: (){
+                                            Navigator.pop(context);
+                                            getImageFromCamera(index);
+                                          },
+                                          child: Container(
+
+                                            padding:EdgeInsets.symmetric(horizontal: 16,vertical: 16),
+                                            child: Row(
+                                              children:[
+                                                Icon(Icons.camera,
+                                                    color:Colors.grey[700]),
+                                                SizedBox(width:8),
+                                                Text("Camera",style: TextStyle(color:Colors.grey[700],fontSize: 18),)
+                                              ]
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                   /* ElevatedButton(
+                                      child: const Text('Gallery'),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        getImageFromGallery(index);
+                                      }
+
+                                    ),*/
+
+                                  ],
+                                ),
+                              ),
+                            );});
                     },
                     child: Container(
-                      color: Colors.white,
+                     // color: Colors.red,
                       child: Padding(
                         padding: EdgeInsets.all(16),
                         child: Container(
+                          //color:Colors.blue,
                           padding: EdgeInsets.all(10),
                           //   clipBehavior: Clip.hardEdge,
                           child: Column(
                             //clipBehavior: Clip.hardEdge,
 
                             children: [
+                          Stack(
+                          children: [
+                              Container(
+                                width: 100,
+                                height:100,
+                                clipBehavior: Clip.hardEdge,
+                                decoration: BoxDecoration(
+                                    color:MyColors.greyBackground,
+                                    //border: Border.all(color: Colors.grey[700]),
+                                    borderRadius: BorderRadius.circular(4)
+                                ),
+                                margin: EdgeInsets.symmetric(horizontal: 8),
 
+                                child: items[index].file == null ? SvgPicture.asset(
+                                  'asset/images/jpg_logo.svg',
+                                  alignment: Alignment.center,
 
-                              items[index].file == null ? SvgPicture.asset(
-                                'asset/images/jpg_logo.svg',
-                                alignment: Alignment.center,
+                                ) : Image.file(
+                                  items[index].file,
+                                  fit: BoxFit.contain,
+                                ),
+                              ),Positioned(
+                              right:10,
+                              top:5,
+                              child:
+                              items[index].file == null ? SizedBox():
+                              GestureDetector(
+                                onTap: (){
 
-                              ) : Image.file(
-                                items[index].file,
-                                width: 50,
-                                height: 50,
+                                  setState(() {
+                                    //items.removeAt(index);
+                                    items[index].file=null;
+                                  });
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.all(1),
+                                  padding:EdgeInsets.all(2),
+                                  decoration:BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          Colors.red[900],
+                                          Colors.red[500],
+                                          // Color(0x00000000)
+                                        ],
+                                        begin: Alignment.bottomCenter,
+                                        end: Alignment.topCenter,
+                                      ),
+                                      borderRadius: BorderRadius.circular(50)
+                                  ),
+                                  //  color:Colors.yellow,
+                                  child:
+                                  Icon(
+
+                                    Icons.close,
+                                    color: Colors.white,
+                                    size: 16.0,
+
+                                  ),
+                                ),
                               ),
+                            )]),
+
                               SizedBox(height: 10),
                               Text(items[index].name,
                                 overflow: TextOverflow.ellipsis,),
@@ -195,15 +319,7 @@ class WorksheetAttachmentState extends State<WorksheetAttachment> {
             child: Container(
               color: Colors.white,
               child: _getInputText(comment, "Comment", "Comment", "",
-                  lines: 4),
-            ),
-          ),
-          SliverFillRemaining(
-            hasScrollBody: false,
-
-            child: Container(
-              color: Colors.white,
-
+                  lines: 3),
             ),
           ),
           SliverToBoxAdapter(
@@ -223,7 +339,7 @@ class WorksheetAttachmentState extends State<WorksheetAttachment> {
                       element.file == null);
                       if(flag)
                       {
-                     Utility.showMsg(context,"Please select all mentioned documents.");
+                        Utility.showMsg(context,"Please select all mentioned documents.");
                         return;
                       }
 
@@ -234,7 +350,18 @@ class WorksheetAttachmentState extends State<WorksheetAttachment> {
                   ),
                 ),
               )
-          )
+          ),
+          SliverFillRemaining(
+            hasScrollBody: false,
+            fillOverscroll: true,
+
+
+            child: Container(
+              color: Colors.white,
+
+            ),
+          ),
+
 
         ]),
       ),

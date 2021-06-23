@@ -10,28 +10,33 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 
+import 'DataClasses.dart';
 import 'SessionManager.dart';
 import 'api.dart';
 
-class IncidentLog extends StatefulWidget {
+class FuelLogDashboard extends StatefulWidget {
   Map<String, dynamic> data = Map<String, dynamic>();
 
-  IncidentLog({Key key, this.data}) : super(key: key);
+  FuelLogDashboard({Key key, this.data}) : super(key: key);
 
   @override
-  IncidentLogState createState() => IncidentLogState(data);
+  FuelLogDashboardState createState() => FuelLogDashboardState(data);
 }
 
-class IncidentLogState extends State<IncidentLog> {
+class FuelLogDashboardState extends State<FuelLogDashboard> {
   Map<String, dynamic> data = Map<String, dynamic>();
-  var reportedDate = TextEditingController();
+  var amount = TextEditingController();
   var truckId = TextEditingController();
+  var liters = TextEditingController();
   var comment = TextEditingController();
+
+  Truck selected_truck;
+  List<Truck> truck_items = [];
   List<File> upload_files = [];
   final ImagePicker _picker = ImagePicker();
-  String rego;
 
-  IncidentLogState(this.data);
+
+  FuelLogDashboardState(this.data);
 
   @override
   void initState() {
@@ -42,8 +47,7 @@ class IncidentLogState extends State<IncidentLog> {
       // NEW
     );
 
-    rego = data["rego"];
-    truckId.text = rego;
+    _getTruck("act=GET_TRUCK");
   }
 
   ScrollController _scrollController;
@@ -59,7 +63,7 @@ class IncidentLogState extends State<IncidentLog> {
         elevation: 0.0,
         centerTitle: true,
         title: Text(
-          "IncidentLog",
+          "Fuel Log",
           style: Theme
               .of(context)
               .textTheme
@@ -81,7 +85,7 @@ class IncidentLogState extends State<IncidentLog> {
                         child: Padding(
                           padding: EdgeInsets.only(right: 10),
                           child: SvgPicture.asset(
-                            'asset/images/work_time_amico.svg',
+                            'asset/images/gas_station.svg',
                             alignment: Alignment.bottomRight,
                             width: MediaQuery
                                 .of(context)
@@ -148,26 +152,51 @@ class IncidentLogState extends State<IncidentLog> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          _getInputText(truckId, "Truck No", "Truck No", "",
-                              is_enable: false),
+
                           Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 20),
-                              child: TextFormField(
-                                onTap: () {
-                                  _selectDate(context, reportedDate);
-                                },
-                                readOnly: true,
-                                controller: reportedDate,
-                                decoration: InputDecoration(
-                                    hintText: "Reported Date",
-                                    labelText: "Reported Date"),
-                                validator: (value) {
-                                  /*   if (value.isEmpty) {
-              return msg;
-            }*/
-                                  return null;
-                                },
-                              )),
+                            padding:
+                            EdgeInsets.symmetric(horizontal: 20,vertical:20),
+                            child: DropdownButtonFormField<Truck>(
+
+                              decoration:InputDecoration(
+
+                                isDense: true,
+                                labelText: "Truck",
+                                focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(color: Color(0xff009933))),
+
+                              ),
+
+
+                              validator: (value) =>
+                              value == null ? "Please Select Truck." : null,
+                              value: selected_truck,
+                              onChanged: (Truck Value) {
+                                setState(() {
+                                  selected_truck = Value;
+                                  if(selected_truck.truck_cat =="1")
+                                  {
+
+                                  }
+                                });
+                              },
+                              items: truck_items.map((Truck truck) {
+                                return DropdownMenuItem<Truck>(
+                                  value: truck,
+                                  child: Row(
+                                    children: <Widget>[
+                                      Text(
+                                        truck.rego,
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                          _getInputText(amount, "Amount", "Amount", "",is_numeric: true),
+                          _getInputText(liters, "Liters", "Liters", "",is_numeric: true),
                           _getInputText(comment, "Comment", "Comment", "",
                               lines: 4),
 
@@ -297,9 +326,10 @@ class IncidentLogState extends State<IncidentLog> {
                 )
             ),
           ),
-          SliverToBoxAdapter(
-            child:Container(
-              color:Colors.white,
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: Container(
+              color: Colors.white,
               child: Padding(
                 padding: EdgeInsets.all(20),
                 child: ElevatedButton(
@@ -315,13 +345,6 @@ class IncidentLogState extends State<IncidentLog> {
                       style: TextStyle(color: Colors.white, fontSize: 16)),
                 ),
               ),
-            ),
-          ),
-          SliverFillRemaining(
-            hasScrollBody: false,
-            child: Container(
-              color: Colors.white,
-
             ),
           ),
         ]),
@@ -345,10 +368,10 @@ class IncidentLogState extends State<IncidentLog> {
             left: 20.0,
             right: 20.0),
         child: TextFormField(
-          inputFormatters: is_numeric
+          /* inputFormatters: is_numeric
               ? [FilteringTextInputFormatter.digitsOnly]
-              : [FilteringTextInputFormatter.deny("~")],
-          keyboardType: is_numeric ? TextInputType.number : TextInputType.text,
+              : [FilteringTextInputFormatter.deny("~")],*/
+          keyboardType: is_numeric ? TextInputType.numberWithOptions(decimal:true) : TextInputType.text,
           enabled: is_enable,
           readOnly: readOnly,
           controller: controller,
@@ -370,13 +393,11 @@ class IncidentLogState extends State<IncidentLog> {
 
   Future<Null> _selectDate(BuildContext context,
       TextEditingController controller) async {
-    var date= DateTime.now();
-
     final DateTime picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(date.year,date.month-6,date.day),
-      lastDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2050),
     );
     if (picked != null)
       setState(() {
@@ -429,15 +450,27 @@ class IncidentLogState extends State<IncidentLog> {
 
   _saveData() async {
 
-    if(reportedDate.text.isEmpty)
-      {
-        Utility.showMsg(context,"Plese select Reported date.");
-        return;
-      }
+    if(selected_truck==null)
+    {
+      Utility.showMsg(context,"Plese select Truck.");
+      return;
+    }
+
+    if(amount.text.isEmpty)
+    {
+      Utility.showMsg(context,"Plese enter amount.");
+      return;
+    }
+    if(liters.text.isEmpty)
+    {
+      Utility.showMsg(context,"Please enter liters.");
+      return;
+    }
+
 
     if(upload_files.length<1)
     {
-      Utility.showMsg(context,"Plese upload atleast one incident image.");
+      Utility.showMsg(context,"Plese upload atleast one fuel log image.");
       return;
     }
 
@@ -447,11 +480,12 @@ class IncidentLogState extends State<IncidentLog> {
     String driver_id= user_data[SessionManager.driverId];
 
 
-    data1['act'] = 'ADD_INCIDENT';
+    data1['act'] = 'ADD_FUEL_LOG';
     data1["user_id"] = driver_id;
-    data1["truck_id"] = data['truck_id'];
-    data1["job_id"] = data['job_id'];
-    data1["reported_date"] = reportedDate.text;
+    data1["truck_id"] = selected_truck.id;
+    data1["job_id"] = "";
+    data1["amount"] = amount.text;
+    data1["liters"] = liters.text;
     data1["comment"] = comment.text;
 
 
@@ -464,7 +498,7 @@ class IncidentLogState extends State<IncidentLog> {
     if (resp["status"]) {
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Incident saved successfully.'),
+        content: Text('Fuel log saved successfully.'),
         duration: const Duration(seconds: 5),
 
       ));
@@ -476,6 +510,26 @@ class IncidentLogState extends State<IncidentLog> {
         duration: const Duration(seconds: 5),
 
       ));
+    }
+  }
+
+  _getTruck(String url) async {
+    final response = await API.getData(url);
+
+    //debugger();
+    var response_data = json.decode(response.body);
+    if (this.mounted) {
+      setState(() {
+        Iterable list = response_data["data"];
+        // debugger();
+        truck_items = list.map((model) => Truck.fromJson(model)).toList();
+        if(data !=null) {
+          if(truck_items.length>0) {
+            selected_truck = truck_items.singleWhere((element) => element.id ==
+                data['selected_truck'].id);
+          }
+        }
+      });
     }
   }
 }

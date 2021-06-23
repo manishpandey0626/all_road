@@ -81,12 +81,11 @@ class JobState extends State<Job> {
       appBar: AppBar(
         backgroundColor: MyColors.myCustomGreen,
         elevation: 0.0,
-        title: Align(
-            alignment: Alignment.center,
-            child: Text(
-              "Job",
-              style: Theme.of(context).textTheme.headline1,
-            )),
+        centerTitle: true,
+        title: Text(
+          "Job",
+          style: Theme.of(context).textTheme.headline1,
+        ),
       ),
       body: SafeArea(
         child: CustomScrollView(controller: _scrollController, slivers: [
@@ -172,6 +171,7 @@ class JobState extends State<Job> {
                     onChanged: enable_truck? (Truck Value) {
                       setState(() {
                         selected_truck = Value;
+                       // debugger();
                         if(selected_truck.truck_cat =="1")
                           {
 
@@ -194,7 +194,7 @@ class JobState extends State<Job> {
                   ),
                 ),
                 Visibility(
-                  visible: selected_truck==null? false:selected_truck.truck_cat=="1" ? true:false,
+                  visible: selected_truck==null? false:selected_truck.truck_cat=="1" || selected_truck.truck_cat=="2" ? true:false,
                 //  maintainAnimation: true,
                   child: Padding(
                     padding:
@@ -244,7 +244,7 @@ class JobState extends State<Job> {
 
                       decoration:InputDecoration(
                         isDense: true,
-                        labelText: "Trailer",
+                        labelText: "Trailer 2",
                         focusedBorder: UnderlineInputBorder(
                             borderSide: BorderSide(color: Color(0xff009933))),
 
@@ -335,7 +335,8 @@ class JobState extends State<Job> {
 
 
 
-                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => Precheck(data:data1)));
+                        //Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => Precheck(data:data1)));
+                        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => Precheck(data:data1)));
                       },
                       child: Text('Pre Check',
                           style: TextStyle(color: Colors.white, fontSize: 16)),

@@ -57,12 +57,11 @@ class DriverManual2State extends State<DriverManual2> {
       appBar: AppBar(
         backgroundColor: MyColors.myCustomGreen,
         elevation: 0.0,
-        title: Align(
-            alignment: Alignment.center,
-            child: Text(
-              "PDF",
-              style: Theme.of(context).textTheme.headline1,
-            )),
+        centerTitle: true,
+        title: Text(
+          "PDF",
+          style: Theme.of(context).textTheme.headline1,
+        ),
         actions: [
           /*GestureDetector(
             onTap: ()

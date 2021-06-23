@@ -9,9 +9,7 @@ import 'Dashboard.dart';
 import 'JobDetail.dart';
 import 'SessionManager.dart';
 import 'api.dart';
-import 'driver_manual.dart';
 import 'induction.dart';
-import 'job.dart';
 
 class Login extends StatefulWidget {
   Login({Key key, this.title}) : super(key: key);
@@ -75,95 +73,94 @@ class _LoginState extends State<Login> {
       backgroundColor: Theme.of(context).primaryColor,
       resizeToAvoidBottomInset: true,
       body: Form(
-      key: _formKey,
+        key: _formKey,
         child: SafeArea(
           child: SingleChildScrollView(
-              child: Stack(
-                  alignment: Alignment.topCenter,
-                  children: <Widget>[
-            Positioned(
+            child: Stack(alignment: Alignment.topCenter,
+                children: <Widget>[
 
-
-                child: SvgPicture.asset('asset/images/background2.svg',
-                    alignment: Alignment.topCenter,
-                    width: MediaQuery.of(context).size.width,
+                  Image.asset("asset/images/background2_png.png",fit:BoxFit.fill,
                     height: size.height,
-
-                    )
-                    ),
-            Positioned(
-                bottom: 0,
-                child: SvgPicture.asset('asset/images/logo_road.svg',
-                    alignment: Alignment.topCenter,
-                    width: MediaQuery.of(context).size.width,
-                    height: size.height*0.3)),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(
-                  height: 20,
-                ),
-                SvgPicture.asset('asset/images/logo.svg'),
-                SizedBox(
-                  height: 20,
-                ),
-                Container(
-                //    color:Colors.red,
-                  alignment: Alignment.center,
-                  width: size.width - 60,
-                  height: size.height*0.5,
-                  /*  constraints: BoxConstraints(
-                      minHeight: size.height*0.6,
-                    ),
-*/
-                 // height: 320,
-                  child: Card(
-
-                    color: Color(0xffe1e1e1),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    elevation: 10.0,
-                    child: Column(children: <Widget>[
-                      Padding(
-                          padding: EdgeInsets.only(
-                              top: 20, bottom: 0, left: 20.0, right: 0),
-                          child: Align(
-                            alignment: Alignment.topCenter,
-                            child: Text("Login",
-                                style: Theme.of(context).textTheme.headline5),
-                          )),
-                      SizedBox(height: 10,),
-                      _getInputText(
-                          email, "E-Mail Address", "E-Mail Address", "Invalid mail id"),
-                     _getInputText(password, "Password", "Password", "Invalid Password Id",obscureText: true),
-                      Padding(
-                        padding: EdgeInsets.only(top: 20.0,bottom:20),
-                        child: Container(
-                            child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.fromLTRB(50, 15, 50, 15),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50.0),
-                              )),
-                          onPressed: () {
-                            // Validate will return true if the form is valid, or false if
-                            // the form is invalid.
-                            if (_formKey.currentState.validate()) {
-
-                            _login();
-                            }
-                          },
-                          child: Text('Login',
-                              style: TextStyle(color: Colors.white, fontSize: 16)),
-                        )),
-                      ),
-                    ]),
+                    width: size.width,
                   ),
-                )
-              ],
-            ),
-          ])),
+                  Column(
+
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      SizedBox(
+                        height:20,
+                      ),
+                      SvgPicture.asset('asset/images/logo.svg',height: 150,),
+                 //     SizedBox(height: 20,),
+
+
+
+
+                    ],
+                  ),
+                  Positioned(
+                    bottom: size.height*0.15,
+                    top:200,
+                    child: Container(
+
+                      alignment: Alignment.center,
+                      width: size.width - 60,
+                      //height: 450,
+                      /*  constraints: BoxConstraints(
+                  minHeight: size.height*0.6,
+                  ),
+*/
+                      // height: 320,
+                      child: Card(
+                        color: Color(0xffe1e1e1),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                        elevation: 10.0,
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            //mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Padding(
+                                  padding: EdgeInsets.only(
+                                      top: 20, bottom: 0, left: 20.0, right: 20),
+                                  child: Align(
+                                    alignment: Alignment.topCenter,
+                                    child: Text("Login",
+                                        style: Theme.of(context).textTheme.headline5),
+                                  )),
+                              SizedBox(height: 10,),
+                              _getInputText(
+                                  email, "E-Mail Address", "E-Mail Address", "Invalid mail id"),
+                              _getInputText(password, "Password", "Password", "Invalid Password Id",obscureText: true),
+                              Padding(
+                                padding: EdgeInsets.only(top: 20.0,bottom:20),
+                                child: Container(
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          padding: EdgeInsets.fromLTRB(50, 15, 50, 15),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(50.0),
+                                          )),
+                                      onPressed: () {
+                                        // Validate will return true if the form is valid, or false if
+                                        // the form is invalid.
+                                        if (_formKey.currentState.validate()) {
+
+                                          _login();
+                                        }
+                                      },
+                                      child: Text('Login',
+                                          style: TextStyle(color: Colors.white, fontSize: 16)),
+                                    )),
+                              ),
+                            ]),
+                      ),
+                    ),
+                  ),
+
+                ]),
+          ),
         ),
       ),
     ); // This trailing comma makes auto-formatting nicer for build methods.
@@ -185,10 +182,10 @@ class _LoginState extends State<Login> {
           obscureText: obscureText,
           maxLength: 1000,
           decoration: InputDecoration(
-           /* hintStyle: TextStyle(
+            /* hintStyle: TextStyle(
                 color: Theme.of(context).primaryColor),*/
-            hintText: hint,
-            counterStyle: TextStyle(color:Colors.transparent)
+              hintText: hint,
+              counterStyle: TextStyle(color:Colors.transparent)
 
 
           ),
@@ -205,18 +202,18 @@ class _LoginState extends State<Login> {
 
   _login() async {
 
-  //  Dialogs.showLoadingDialog(context, _keyLoader);
-Map<String,dynamic> data = Map<String,dynamic>();
-data['act']="LOGIN";
-data['email']=email.text;
-data['password']=password.text;
+    //  Dialogs.showLoadingDialog(context, _keyLoader);
+    Map<String,dynamic> data = Map<String,dynamic>();
+    data['act']="LOGIN";
+    data['email']=email.text;
+    data['password']=password.text;
     var response = await API.login(data);
 
 
     var response_data= json.decode(response.body);
 
 //debugger();
-   // Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
+    // Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
     bool flag=response_data["status"];
     if(flag)
     {
@@ -228,10 +225,10 @@ data['password']=password.text;
         _getJobStatus();
       }
       else
-        {
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => Induction()));
-        }
+      {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => Induction()));
+      }
     }
     else
     {

@@ -1,5 +1,7 @@
 
+import 'package:all_road/FuelLogDashboard.dart';
 import 'package:all_road/ImportantLinks.dart';
+import 'package:all_road/IncidentLogDashboard.dart';
 import 'package:all_road/JobListing.dart';
 import 'package:all_road/MyColors.dart';
 import 'package:flutter/cupertino.dart';
@@ -61,12 +63,11 @@ class HomeState extends State<Home> {
       appBar: AppBar(
         backgroundColor: MyColors.myCustomGreen,
         elevation: 0.0,
-        title: Align(
-            alignment: Alignment.center,
-            child: Text(
-              "Dashboard",
-              style: Theme.of(context).textTheme.headline1,
-            )),
+        centerTitle: true,
+        title: Text(
+          "Dashboard",
+          style: Theme.of(context).textTheme.headline1,
+        ),
       ),
       body: SafeArea(
         child: CustomScrollView(controller: _scrollController, slivers: [
@@ -224,29 +225,62 @@ class HomeState extends State<Home> {
                         ),
                       ),
 
-                      /*Container(
-                        width: size.width*0.4,
-                        padding:EdgeInsets.all(20),
-                        child:Column(
-                          children: [
-                            SvgPicture.asset(
-                              'asset/images/danger_sign.svg',
+                      GestureDetector(
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => IncidentLogDashboard()));
+                        },
+                        child: Container(
+                          width: size.width*0.4,
+                          padding:EdgeInsets.all(20),
+                          child:Column(
+                            children: [
+                              SvgPicture.asset(
+                                'asset/images/danger_sign.svg',
 
-                              width: 30,
-                              height: 30,
-                            ),
-                            SizedBox(height:10),
-                            Text("Incident Log",style: Theme.of(context).textTheme.headline3,)
+                                width: 30,
+                                height: 30,
+                              ),
+                              SizedBox(height:10),
+                              Text("Incident Log",style: Theme.of(context).textTheme.headline3,)
 
-                          ],
+                            ],
+                          ),
+                          decoration: BoxDecoration(
+                              color: Colors.grey[200],
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(10))),
                         ),
-                        decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(10))),
-                      )*/
+                      ),
+
 
                     ],
+                  ),
+                  SizedBox(height:20),
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => FuelLogDashboard()));
+                    },
+                    child: Container(
+                      width: size.width,
+                      padding:EdgeInsets.all(20),
+                      child:Column(
+                        children: [
+                          SvgPicture.asset(
+                            'asset/images/log_format.svg',
+
+                            width: 30,
+                            height: 30,
+                          ),
+                          SizedBox(height:10),
+                          Text("Fuel Log",style: Theme.of(context).textTheme.headline3,)
+
+                        ],
+                      ),
+                      decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius:
+                          BorderRadius.all(Radius.circular(10))),
+                    ),
                   ),
                   SizedBox(height:20),
 
@@ -267,27 +301,7 @@ class HomeState extends State<Home> {
                           style: TextStyle(color: Colors.white, fontSize: 16)),
                     ),
                   ),
-                  /*Container(
-                    width: size.width,
-                    padding:EdgeInsets.all(20),
-                    child:Column(
-                      children: [
-                        SvgPicture.asset(
-                          'asset/images/log_format.svg',
 
-                          width: 30,
-                          height: 30,
-                        ),
-                        SizedBox(height:10),
-                        Text("Fuel Log",style: Theme.of(context).textTheme.headline3,)
-
-                      ],
-                    ),
-                    decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(10))),
-                  ),*/
                   SizedBox(height:20),
                 ]
               )

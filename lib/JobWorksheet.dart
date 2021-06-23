@@ -54,12 +54,11 @@ class JobWorksheetState extends State<JobWorksheet> {
       appBar: AppBar(
         backgroundColor: MyColors.myCustomGreen,
         elevation: 0.0,
-        title: Align(
-            alignment: Alignment.center,
-            child: Text(
-              "JobWorksheets",
-              style: Theme.of(context).textTheme.headline1,
-            )),
+        centerTitle: true,
+        title: Text(
+          "JobWorksheets",
+          style: Theme.of(context).textTheme.headline1,
+        ),
         actions: [],
         // backgroundColor: Color(0xFFecf7ef),
       ),

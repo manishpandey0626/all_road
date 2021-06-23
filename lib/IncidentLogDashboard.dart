@@ -10,19 +10,20 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 
+import 'DataClasses.dart';
 import 'SessionManager.dart';
 import 'api.dart';
 
-class IncidentLog extends StatefulWidget {
+class IncidentLogDashboard extends StatefulWidget {
   Map<String, dynamic> data = Map<String, dynamic>();
 
-  IncidentLog({Key key, this.data}) : super(key: key);
+  IncidentLogDashboard({Key key, this.data}) : super(key: key);
 
   @override
-  IncidentLogState createState() => IncidentLogState(data);
+  IncidentLogDashboardState createState() => IncidentLogDashboardState(data);
 }
 
-class IncidentLogState extends State<IncidentLog> {
+class IncidentLogDashboardState extends State<IncidentLogDashboard> {
   Map<String, dynamic> data = Map<String, dynamic>();
   var reportedDate = TextEditingController();
   var truckId = TextEditingController();
@@ -31,7 +32,10 @@ class IncidentLogState extends State<IncidentLog> {
   final ImagePicker _picker = ImagePicker();
   String rego;
 
-  IncidentLogState(this.data);
+  Truck selected_truck;
+  List<Truck> truck_items = [];
+
+  IncidentLogDashboardState(this.data);
 
   @override
   void initState() {
@@ -42,8 +46,8 @@ class IncidentLogState extends State<IncidentLog> {
       // NEW
     );
 
-    rego = data["rego"];
-    truckId.text = rego;
+    _getTruck("act=GET_TRUCK");
+
   }
 
   ScrollController _scrollController;
@@ -148,8 +152,48 @@ class IncidentLogState extends State<IncidentLog> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          _getInputText(truckId, "Truck No", "Truck No", "",
-                              is_enable: false),
+                          Padding(
+                            padding:
+                            EdgeInsets.symmetric(horizontal: 20,vertical:20),
+                            child: DropdownButtonFormField<Truck>(
+
+                              decoration:InputDecoration(
+
+                                isDense: true,
+                                labelText: "Truck",
+                                focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(color: Color(0xff009933))),
+
+                              ),
+
+
+                              validator: (value) =>
+                              value == null ? "Please Select Truck." : null,
+                              value: selected_truck,
+                              onChanged: (Truck Value) {
+                                setState(() {
+                                  selected_truck = Value;
+                                  if(selected_truck.truck_cat =="1")
+                                  {
+
+                                  }
+                                });
+                              },
+                              items: truck_items.map((Truck truck) {
+                                return DropdownMenuItem<Truck>(
+                                  value: truck,
+                                  child: Row(
+                                    children: <Widget>[
+                                      Text(
+                                        truck.rego,
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                          ),
                           Padding(
                               padding: EdgeInsets.symmetric(horizontal: 20),
                               child: TextFormField(
@@ -429,11 +473,17 @@ class IncidentLogState extends State<IncidentLog> {
 
   _saveData() async {
 
+    if(selected_truck==null)
+    {
+      Utility.showMsg(context,"Plese select Truck.");
+      return;
+    }
+
     if(reportedDate.text.isEmpty)
-      {
-        Utility.showMsg(context,"Plese select Reported date.");
-        return;
-      }
+    {
+      Utility.showMsg(context,"Plese select Reported date.");
+      return;
+    }
 
     if(upload_files.length<1)
     {
@@ -449,8 +499,8 @@ class IncidentLogState extends State<IncidentLog> {
 
     data1['act'] = 'ADD_INCIDENT';
     data1["user_id"] = driver_id;
-    data1["truck_id"] = data['truck_id'];
-    data1["job_id"] = data['job_id'];
+    data1["truck_id"] = selected_truck.id;
+    data1["job_id"] = "";
     data1["reported_date"] = reportedDate.text;
     data1["comment"] = comment.text;
 
@@ -476,6 +526,26 @@ class IncidentLogState extends State<IncidentLog> {
         duration: const Duration(seconds: 5),
 
       ));
+    }
+  }
+
+  _getTruck(String url) async {
+    final response = await API.getData(url);
+
+    //debugger();
+    var response_data = json.decode(response.body);
+    if (this.mounted) {
+      setState(() {
+        Iterable list = response_data["data"];
+        // debugger();
+        truck_items = list.map((model) => Truck.fromJson(model)).toList();
+        if(data !=null) {
+          if(truck_items.length>0) {
+            selected_truck = truck_items.singleWhere((element) => element.id ==
+                data['selected_truck'].id);
+          }
+        }
+      });
     }
   }
 }

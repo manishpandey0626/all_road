@@ -219,6 +219,7 @@ class JobDetailData {
   String trailer2_id;
   String rego;
   String truck_cat;
+  String total_run;
 
   JobDetailData({this.job_id,
     this.start_time,
@@ -231,7 +232,8 @@ class JobDetailData {
     this.rego,
     this.truck_cat,
     this.trailer1_id,
-    this.trailer2_id});
+    this.trailer2_id,
+    this.total_run});
 
   factory JobDetailData.fromJson(Map<String, dynamic> parsedJson) {
     return JobDetailData(
@@ -246,7 +248,8 @@ class JobDetailData {
         rego: parsedJson["rego"] as String,
         truck_cat: parsedJson["truck_cat"] as String,
         trailer1_id: parsedJson["trailer_id_1"] as String,
-        trailer2_id: parsedJson["trailer_id_2"] as String
+        trailer2_id: parsedJson["trailer_id_2"] as String,
+        total_run: parsedJson["total_run"] as String
 
     );
   }
@@ -429,5 +432,18 @@ class WorksheetAttachmentData
 
 
 
+class Declaration {
+  String question;
+  bool flag;
 
+  Declaration({this.question,this.flag});
+  factory Declaration.fromJson(Map<String, dynamic> parsedJson,{status=false}) {
+    return Declaration(
+        question: parsedJson["question"] as String,
+        flag:false,
+    );
+  }
+
+
+}
 
