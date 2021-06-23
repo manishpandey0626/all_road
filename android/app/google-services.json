@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "746359684824",
+    "project_id": "all-road-af6a7",
+    "storage_bucket": "all-road-af6a7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:746359684824:android:91f49d2a874ae2e79d21ad",
+        "android_client_info": {
+          "package_name": "com.websnt.all_road"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "746359684824-8it43e9g208fuopq63qrdq52ge2isj1o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAaFbKslVCea-GWva_czYYRn_T31PBxcPU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "746359684824-8it43e9g208fuopq63qrdq52ge2isj1o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
