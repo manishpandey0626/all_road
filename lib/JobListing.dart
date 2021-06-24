@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:all_road/JobWorksheet.dart';
 import 'package:all_road/MyColors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
+
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -265,7 +265,7 @@ class JobListingState extends State<JobListing> {
     }
   }
 
-  Future<void> requestDownload(String _name) async {
+/*  Future<void> requestDownload(String _name) async {
     if (await Permission.storage.request().isGranted) {
       // Either the permission was already granted before or the user just granted it.
 
@@ -285,5 +285,5 @@ class JobListingState extends State<JobListing> {
         print(_taskid);
       });
     }
-  }
+  }*/
 }

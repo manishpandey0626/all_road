@@ -1,13 +1,13 @@
 import 'package:all_road/theme.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+//import 'package:firebase_core/firebase_core.dart';
+//import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+//import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'Dashboard.dart';
 import 'SplashScreen.dart';
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+/*Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,
   // make sure you call `initializeApp` before using other Firebase services.
   await Firebase.initializeApp();
@@ -19,15 +19,15 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 AndroidNotificationChannel channel;
 
 /// Initialize the [FlutterLocalNotificationsPlugin] package.
-FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;*/
 
 Future<void> main()async {
-  await FlutterDownloader.initialize(debug:true);
+  //await FlutterDownloader.initialize(debug:true);
 
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+ /* WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();*/
 
-  // Set the background messaging handler early on, as a named top-level function
+/*  // Set the background messaging handler early on, as a named top-level function
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
 
@@ -38,22 +38,11 @@ Future<void> main()async {
       importance: Importance.high,
     );
 
-    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();*/
 
 
-// initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
-/*  const AndroidInitializationSettings initializationSettingsAndroid =
-  AndroidInitializationSettings('@drawable/ic_notification');
 
-  final InitializationSettings initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid
-   );
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings);*/
-
-    /// Create an Android Notification Channel.
-    ///
-    /// We use this channel in the `AndroidManifest.xml` file to override the
-    /// default FCM channel to enable heads up notifications.
+/*
     await flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
         AndroidFlutterLocalNotificationsPlugin>()
@@ -67,6 +56,7 @@ Future<void> main()async {
       badge: true,
       sound: true,
     );
+*/
 
   runApp(MyApp());
 }

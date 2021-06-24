@@ -1,7 +1,7 @@
 import 'package:all_road/utility.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+//import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+//import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'Home.dart';
 import 'Profile.dart';
@@ -26,7 +26,7 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   void initState() {
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    /*FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification notification = message.notification;
       AndroidNotification android = message.notification?.android;
       if (notification != null && android != null ) {
@@ -49,10 +49,10 @@ class _DashboardState extends State<Dashboard> {
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       print('A new onMessageOpenedApp event was published!');
-      /*Navigator.pushNamed(context, '/message',
-          arguments: MessageArguments(message, true));*/
+      *//*Navigator.pushNamed(context, '/message',
+          arguments: MessageArguments(message, true));*//*
 
-    });
+    });*/
   }
 
 

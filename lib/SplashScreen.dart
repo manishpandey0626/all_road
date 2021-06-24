@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'package:all_road/induction.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+//import 'package:firebase_core/firebase_core.dart';
+//import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+//import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Break.dart';
@@ -32,7 +32,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
 
-  FirebaseMessaging messaging;
+  //FirebaseMessaging messaging;
 
 
   String _versionName = 'V1.0';
@@ -41,7 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    registerNotification();
+   // registerNotification();
 
  // _loadWidget();
     navigationPage();
@@ -160,12 +160,12 @@ class _SplashScreenState extends State<SplashScreen> {
     }
   }
 
-  registerNotification() async
+/*  registerNotification() async
   {
    // await Firebase.initializeApp();
     messaging = FirebaseMessaging.instance;
     messaging.getToken().then((value) {
       print("token=> $value");
     });
-  }
+  }*/
 }

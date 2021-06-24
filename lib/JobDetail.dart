@@ -721,7 +721,7 @@ class JobDetailState extends State<JobDetail> {
     job_data['truck_id'] =jobDetailData.truck_id;
 
     var response = await API.postData(job_data);
-    debugger();
+   // debugger();
     print(response.body);
     var resp = json.decode(response.body);
     if (resp["status"]) {
