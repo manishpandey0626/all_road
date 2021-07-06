@@ -868,7 +868,7 @@ class PrecheckBreakState extends State<PrecheckBreak> {
                         Utility.showMsg(context, 'please attend all truck questions.');
                         return;
                       }
-                      if(selected_truck.truck_cat=="1") {
+                      if(selected_truck.truck_cat=="1" || selected_truck.truck_cat=="2") {
                         bool flag2 = trailer_items.any((element) =>
                         element.myanswer == null);
 
@@ -896,7 +896,7 @@ class PrecheckBreakState extends State<PrecheckBreak> {
                         Utility.showMsg(context, "Please select atleast one image for truck");
                         return;
                       }
-                      if(selected_truck.truck_cat=="1" && upload_files_trailer1.length<1)
+                      if((selected_truck.truck_cat=="1" || selected_truck.truck_cat=="2") && upload_files_trailer1.length<1)
                       {
                         Utility.showMsg(context, "Please select atleast one image for trailer 1");
                         return;
@@ -1042,10 +1042,10 @@ class PrecheckBreakState extends State<PrecheckBreak> {
     data['act'] = 'SAVE_PRECHECK_BREAK';
     data["user_id"] = driver_id;
     data["truck_id"] = selected_truck.id;
-    data["trailer1_id"] = truck_cat=="1"?selected_trailer1.id:"";
+    data["trailer1_id"] = truck_cat=="1" || selected_truck.truck_cat=="2"?selected_trailer1.id:"";
     data["trailer2_id"] = truck_cat=="2"?selected_trailer2.id:"";
     data["precheck_truck"] = precheck_data;
-    data["precheck_trailer"] = truck_cat=="1"?precheck_trailer_data:"";
+    data["precheck_trailer"] = truck_cat=="1" || selected_truck.truck_cat=="2" ?precheck_trailer_data:"";
     data["precheck_trailer2"] = truck_cat=="2"?precheck_trailer2_data:"";
     data["truck_comment"] = truck_comment.text;
     data["trailer1_comment"] = trailer1_comment.text;
@@ -1056,7 +1056,7 @@ class PrecheckBreakState extends State<PrecheckBreak> {
     data["truck_cat"]=truck_cat;
     data["job_id"]=job_id;
     data["break_id"]=break_id;
-debugger();
+//debugger();
     List<String> paths=[];
     paths.addAll(upload_files.map((file)=>file.path));
     paths.addAll(upload_files_trailer1.map((file)=>file.path));

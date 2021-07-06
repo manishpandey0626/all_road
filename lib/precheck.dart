@@ -883,7 +883,7 @@ class PrecheckState extends State<Precheck> {
                                 Utility.showMsg(context, 'please attend all truck questions.');
                                 return;
                               }
-                            if(selected_truck.truck_cat=="1") {
+                            if(selected_truck.truck_cat=="1" || selected_truck.truck_cat=="2") {
                               bool flag2 = trailer_items.any((element) =>
                               element.myanswer == null);
 
@@ -911,7 +911,7 @@ class PrecheckState extends State<Precheck> {
                                 Utility.showMsg(context, "Please select atleast one image for truck");
                                 return;
                               }
-                            if(selected_truck.truck_cat=="1" && upload_files_trailer1.length<1)
+                            if((selected_truck.truck_cat=="1" || selected_truck.truck_cat=="2")&& upload_files_trailer1.length<1)
                             {
                               Utility.showMsg(context, "Please select atleast one image for trailer 1");
                               return;
@@ -1078,10 +1078,10 @@ class PrecheckState extends State<Precheck> {
   data['act'] = 'SAVE_PRECHECK';
   data["user_id"] = driver_id;
   data["truck_id"] = selected_truck.id;
-  data["trailer1_id"] = truck_cat=="1"?selected_trailer1.id:"";
+  data["trailer1_id"] = truck_cat=="1" || truck_cat=="2"?selected_trailer1.id:"";
   data["trailer2_id"] = truck_cat=="2"?selected_trailer2.id:"";
   data["precheck_truck"] = precheck_data;
-  data["precheck_trailer"] = truck_cat=="1"?precheck_trailer_data:"";
+  data["precheck_trailer"] = truck_cat=="1"  || truck_cat=="2" ?precheck_trailer_data:"";
   data["precheck_trailer2"] = truck_cat=="2"?precheck_trailer2_data:"";
   data["truck_comment"] = truck_comment.text;
   data["trailer1_comment"] = trailer1_comment.text;
@@ -1096,7 +1096,7 @@ class PrecheckState extends State<Precheck> {
  paths.addAll(upload_files_trailer1.map((file)=>file.path));
  paths.addAll(upload_files_trailer2.map((file)=>file.path));
   var response = await API.saveBusiness(data,paths);
-  //debugger();
+  debugger();
   var resp = json.decode(response);
   if (resp["status"]) {
 

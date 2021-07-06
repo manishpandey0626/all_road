@@ -251,7 +251,7 @@ class ImportantLinksState extends State<ImportantLinks> {
   _launchURL(String image) async {
 
     if(image.isNotEmpty) {
-      String url = imageUrl + image;
+      String url =image;
       if (await canLaunch(url)) {
         await launch(url);
       } else {

@@ -335,13 +335,13 @@ class WorksheetAttachmentState extends State<WorksheetAttachment> {
                           borderRadius: BorderRadius.circular(50.0),
                         )),
                     onPressed: () {
-                      bool flag = items.any((element) =>
+                    /*  bool flag = items.any((element) =>
                       element.file == null);
                       if(flag)
                       {
                         Utility.showMsg(context,"Please select all mentioned documents.");
                         return;
-                      }
+                      }*/
 
                       _saveData();
                     },
@@ -369,12 +369,12 @@ class WorksheetAttachmentState extends State<WorksheetAttachment> {
   }
 
   _getWorksheet() async {
-    Map<String, dynamic> data = Map<String, dynamic>();
-    data["act"] = "GET_WORKSHEET";
-    data["ids"] = "1,2";
-    final response = await API.postData(data);
+    Map<String, dynamic> post_data = Map<String, dynamic>();
+    post_data["act"] = "GET_WORKSHEET";
+    post_data["ids"] = data['ids'];
+    final response = await API.postData(post_data);
 
-    //debugger();
+    debugger();
     var response_data = json.decode(response.body);
     if (this.mounted) {
       setState(() {
@@ -463,7 +463,15 @@ class WorksheetAttachmentState extends State<WorksheetAttachment> {
 
     Map<String, dynamic> user_data = await SessionManager.getUserDetails();
     String driver_id = user_data[SessionManager.driverId];
-    String ids= items.map((e) => e.id).toList().join(",");
+
+    List<WorksheetAttachmentData> selected_items=items.where((element)=>element.file !=null).toList();
+    if(selected_items.isEmpty)
+      {
+        Utility.showMsg(context,"Please upload atleast one document.");
+        return;
+      }
+
+    String ids= selected_items.map((e) => e.id).toList().join(",");
       data1['act'] = "ADD_WORKSHEET";
       data1["user_id"] = driver_id;
       data1["truck_id"] = data['truck_id'];
@@ -472,11 +480,11 @@ class WorksheetAttachmentState extends State<WorksheetAttachment> {
       data1["trailer2_id"] = data["trailer2_id"];
       data1["ids"] = ids;
 
-    //debugger();
+   // debugger();
       List<String> paths = [];
-      paths.addAll(items.map((element) => element.file.path));
+      paths.addAll(selected_items.map((element) => element.file.path));
       var response = await API.postMultipartData(data1, paths);
-
+    debugger();
       var resp = json.decode(response);
       if (resp["status"]) {
         Navigator.pop(context);
