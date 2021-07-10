@@ -59,15 +59,13 @@ class FuelLogState extends State<FuelLog> {
         backgroundColor: MyColors.myCustomGreen,
         elevation: 0.0,
         centerTitle: true,
-        title: Align(
-            alignment: Alignment.center,
-            child: Text(
-              "Fuel Log",
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .headline1,
-            )),
+        title: Text(
+          "Fuel Log",
+          style: Theme
+              .of(context)
+              .textTheme
+              .headline1,
+        ),
       ),
       body: SafeArea(
         child: CustomScrollView(controller: _scrollController, slivers: [
@@ -102,7 +100,7 @@ class FuelLogState extends State<FuelLog> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Have some faith in us",
+                                  "Maintain your fuel usage \nfor smooth functioning.",
                                   style: Theme
                                       .of(context)
                                       .textTheme
@@ -111,13 +109,13 @@ class FuelLogState extends State<FuelLog> {
                                 SizedBox(
                                   height: 20,
                                 ),
-                                Text(
-                                  "Select one option",
+                                /*Text(
+                                  "Maintain your fuel usage \nfor smooth functioning.",
                                   style: Theme
                                       .of(context)
                                       .textTheme
                                       .headline3,
-                                ),
+                                ),*/
                               ]),
                         ),
                       )
@@ -284,10 +282,9 @@ class FuelLogState extends State<FuelLog> {
                 )
             ),
           ),
-          SliverFillRemaining(
-            hasScrollBody: false,
-            child: Container(
-              color: Colors.white,
+          SliverToBoxAdapter(
+            child:Container(
+              color:Colors.white,
               child: Padding(
                 padding: EdgeInsets.all(20),
                 child: ElevatedButton(
@@ -303,6 +300,13 @@ class FuelLogState extends State<FuelLog> {
                       style: TextStyle(color: Colors.white, fontSize: 16)),
                 ),
               ),
+            ),
+          ),
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: Container(
+              color: Colors.white,
+
             ),
           ),
         ]),

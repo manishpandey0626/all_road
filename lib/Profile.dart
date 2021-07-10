@@ -90,7 +90,7 @@ Map<String,dynamic> user_data=null;
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "",
+                              "Give your details for\nbetter opportunities",
                               style: Theme.of(context).textTheme.headline2,
                             ),
                             SizedBox(

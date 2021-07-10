@@ -98,7 +98,7 @@ class JobListingState extends State<JobListing> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "",
+                                  "Check the details \nof completed tasks",
                                   style: Theme.of(context).textTheme.headline2,
                                 ),
                                 SizedBox(

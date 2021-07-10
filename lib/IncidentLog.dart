@@ -99,7 +99,7 @@ class IncidentLogState extends State<IncidentLog> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Have some faith in us",
+                                  "Post details with \nimage for any incident",
                                   style: Theme
                                       .of(context)
                                       .textTheme
@@ -108,13 +108,13 @@ class IncidentLogState extends State<IncidentLog> {
                                 SizedBox(
                                   height: 20,
                                 ),
-                                Text(
+                                /*Text(
                                   "Select one option",
                                   style: Theme
                                       .of(context)
                                       .textTheme
                                       .headline3,
-                                ),
+                                ),*/
                               ]),
                         ),
                       )

@@ -100,7 +100,7 @@ class BreakDownState extends State<BreakDown> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Have some faith in us",
+                                  "Calm down,",
                                   style: Theme
                                       .of(context)
                                       .textTheme
@@ -110,7 +110,7 @@ class BreakDownState extends State<BreakDown> {
                                   height: 20,
                                 ),
                                 Text(
-                                  "Select one option",
+                                  "Just report the issue\nand we will take care of it.",
                                   style: Theme
                                       .of(context)
                                       .textTheme

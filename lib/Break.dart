@@ -136,7 +136,7 @@ class BreakState extends State<Break> with WidgetsBindingObserver {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Give Yourself a Break",
+                                "Take a relaxing cup of tea.",
                                 style: Theme
                                     .of(context)
                                     .textTheme
@@ -146,7 +146,7 @@ class BreakState extends State<Break> with WidgetsBindingObserver {
                                 height: 20,
                               ),
                               Text(
-                                "Select one option",
+                                "Submit your details here.",
                                 style: Theme
                                     .of(context)
                                     .textTheme

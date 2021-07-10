@@ -103,7 +103,7 @@ class IncidentLogDashboardState extends State<IncidentLogDashboard> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Have some faith in us",
+                                  "Post details with \nimage for any incident",
                                   style: Theme
                                       .of(context)
                                       .textTheme
@@ -112,13 +112,13 @@ class IncidentLogDashboardState extends State<IncidentLogDashboard> {
                                 SizedBox(
                                   height: 20,
                                 ),
-                                Text(
+                                /*Text(
                                   "Select one option",
                                   style: Theme
                                       .of(context)
                                       .textTheme
                                       .headline3,
-                                ),
+                                ),*/
                               ]),
                         ),
                       )

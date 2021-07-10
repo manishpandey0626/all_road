@@ -103,7 +103,7 @@ class FuelLogDashboardState extends State<FuelLogDashboard> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Have some faith in us",
+                                  "Maintain your fuel usage \nfor smooth functioning.",
                                   style: Theme
                                       .of(context)
                                       .textTheme
@@ -112,13 +112,13 @@ class FuelLogDashboardState extends State<FuelLogDashboard> {
                                 SizedBox(
                                   height: 20,
                                 ),
-                                Text(
-                                  "Select one option",
+                                /*Text(
+                                  "Maintain your fuel usage \nfor smooth functioning.",
                                   style: Theme
                                       .of(context)
                                       .textTheme
                                       .headline3,
-                                ),
+                                ),*/
                               ]),
                         ),
                       )
@@ -326,10 +326,9 @@ class FuelLogDashboardState extends State<FuelLogDashboard> {
                 )
             ),
           ),
-          SliverFillRemaining(
-            hasScrollBody: false,
-            child: Container(
-              color: Colors.white,
+          SliverToBoxAdapter(
+            child:Container(
+              color:Colors.white,
               child: Padding(
                 padding: EdgeInsets.all(20),
                 child: ElevatedButton(
@@ -345,6 +344,13 @@ class FuelLogDashboardState extends State<FuelLogDashboard> {
                       style: TextStyle(color: Colors.white, fontSize: 16)),
                 ),
               ),
+            ),
+          ),
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: Container(
+              color: Colors.white,
+
             ),
           ),
         ]),

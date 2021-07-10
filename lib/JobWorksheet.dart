@@ -49,7 +49,8 @@ class JobWorksheetState extends State<JobWorksheet> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: MyColors.myCustomGreen,
+      //backgroundColor: MyColors.myCustomGreen,
+      backgroundColor: Colors.white,
       //drawer: MyDrawer(),
       appBar: AppBar(
         backgroundColor: MyColors.myCustomGreen,
@@ -65,51 +66,54 @@ class JobWorksheetState extends State<JobWorksheet> {
       body: SafeArea(
         child: CustomScrollView(controller: _scrollController, slivers: [
           SliverToBoxAdapter(
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                SizedBox(
-                  height: 10,
-                ),
-                Stack(children: [
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: Padding(
-                      padding: EdgeInsets.only(right: 10),
-                      child: SvgPicture.asset(
-                        'asset/images/city_driver.svg',
-                        alignment: Alignment.bottomRight,
-                        width: MediaQuery.of(context).size.width,
-                        height: 150,
+              child: Container(
+                color: MyColors.myCustomGreen,
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Stack(children: [
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: Padding(
+                        padding: EdgeInsets.only(right: 10),
+                        child: SvgPicture.asset(
+                          'asset/images/city_driver.svg',
+                          alignment: Alignment.bottomRight,
+                          width: MediaQuery.of(context).size.width,
+                          height: 150,
+                        ),
                       ),
                     ),
-                  ),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "",
-                              style: Theme.of(context).textTheme.headline2,
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Text(
-                              "",
-                              style: Theme.of(context).textTheme.headline3,
-                            ),
-                          ]),
-                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "",
+                                style: Theme.of(context).textTheme.headline2,
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Text(
+                                "",
+                                style: Theme.of(context).textTheme.headline3,
+                              ),
+                            ]),
+                      ),
+                    )
+                  ]),
+                  SizedBox(
+                    height: 10,
                   )
                 ]),
-                SizedBox(
-                  height: 10,
-                )
-              ])),
+              )),
           SliverToBoxAdapter(
               child: Container(
             decoration: BoxDecoration(

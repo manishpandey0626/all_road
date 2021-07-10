@@ -11,6 +11,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'DataClasses.dart';
 import 'SessionManager.dart';
 import 'api.dart';
+import 'utility.dart';
 
 class Job extends StatefulWidget {
   Map<String, dynamic> data = Map<String, dynamic>();
@@ -117,16 +118,16 @@ class JobState extends State<Job> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Have some faith in us",
+                              "Pre check the details \nof your vehicle",
                               style: Theme.of(context).textTheme.headline2,
                             ),
                             SizedBox(
                               height: 20,
                             ),
-                            Text(
+                            /*Text(
                               "Select one option",
                               style: Theme.of(context).textTheme.headline3,
-                            ),
+                            ),*/
                           ]),
                     ),
                   )
@@ -296,7 +297,7 @@ class JobState extends State<Job> {
                             ));
                             return;
                           }
-                      if(selected_truck.truck_cat=="1" && selected_trailer==null)
+                      if((selected_truck.truck_cat=="1" || selected_truck.truck_cat=="2") && selected_trailer==null)
                         {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: const Text('Please select Trailer 1'),
@@ -313,6 +314,12 @@ class JobState extends State<Job> {
                             duration: const Duration(seconds: 3),
 
                           ));
+                          return;
+                        }
+
+                        if(selected_truck.truck_cat=="2" && selected_trailer.rego==selected_trailer2.rego)
+                        {
+                          Utility.showMsg(context,"Trailer 1 & Trailer 2 must not be same!!");
                           return;
                         }
 

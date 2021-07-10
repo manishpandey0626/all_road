@@ -143,7 +143,7 @@ class JobDetailState extends State<JobDetail> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "Have some faith in us",
+                                    "Mention the details \nbefore you start",
                                     style: Theme
                                         .of(context)
                                         .textTheme
@@ -152,13 +152,13 @@ class JobDetailState extends State<JobDetail> {
                                   SizedBox(
                                     height: 20,
                                   ),
-                                  Text(
-                                    "Select one option",
+                                  /*Text(
+                                    "Mention the details \nbefore you start",
                                     style: Theme
                                         .of(context)
                                         .textTheme
                                         .headline3,
-                                  ),
+                                  ),*/
                                 ]),
                           ),
                         )

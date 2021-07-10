@@ -99,16 +99,16 @@ class HomeState extends State<Home> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "All type of document",
+                                  "All you need to \nknow is available \non one click.",
                                   style: Theme.of(context).textTheme.headline2,
                                 ),
                                 SizedBox(
                                   height: 20,
                                 ),
-                                Text(
+                                /*Text(
                                   "Collect all type document",
                                   style: Theme.of(context).textTheme.headline3,
-                                ),
+                                ),*/
                               ]),
                         ),
                       )

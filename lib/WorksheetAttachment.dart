@@ -108,7 +108,7 @@ class WorksheetAttachmentState extends State<WorksheetAttachment> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "",
+                                    "Collect and check the \ndocuments before \nswitching on the \nengine",
                                     style: Theme
                                         .of(context)
                                         .textTheme
@@ -117,13 +117,13 @@ class WorksheetAttachmentState extends State<WorksheetAttachment> {
                                   SizedBox(
                                     height: 20,
                                   ),
-                                  Text(
-                                    "Collect all types  \ndocuments",
+                                  /*Text(
+                                    "Collect and check the documents \nbefore switching on the engine",
                                     style: Theme
                                         .of(context)
                                         .textTheme
                                         .headline3,
-                                  ),
+                                  ),*/
                                 ]),
                           ),
                         )
@@ -374,7 +374,7 @@ class WorksheetAttachmentState extends State<WorksheetAttachment> {
     post_data["ids"] = data['ids'];
     final response = await API.postData(post_data);
 
-    debugger();
+    //debugger();
     var response_data = json.decode(response.body);
     if (this.mounted) {
       setState(() {
@@ -484,7 +484,7 @@ class WorksheetAttachmentState extends State<WorksheetAttachment> {
       List<String> paths = [];
       paths.addAll(selected_items.map((element) => element.file.path));
       var response = await API.postMultipartData(data1, paths);
-    debugger();
+   // debugger();
       var resp = json.decode(response);
       if (resp["status"]) {
         Navigator.pop(context);

@@ -115,7 +115,7 @@ class ImportantLinksState extends State<ImportantLinks> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "",
+                                  "Below is a list \nof helpful links",
                                   style: Theme.of(context).textTheme.headline2,
                                 ),
                                 SizedBox(

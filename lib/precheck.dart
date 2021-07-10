@@ -1096,7 +1096,7 @@ class PrecheckState extends State<Precheck> {
  paths.addAll(upload_files_trailer1.map((file)=>file.path));
  paths.addAll(upload_files_trailer2.map((file)=>file.path));
   var response = await API.saveBusiness(data,paths);
-  debugger();
+  //debugger();
   var resp = json.decode(response);
   if (resp["status"]) {
 

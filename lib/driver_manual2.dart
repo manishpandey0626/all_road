@@ -115,16 +115,16 @@ class DriverManual2State extends State<DriverManual2> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Enhance Your Skills",
+                                  "Go through the manual \nfor clearing doubts and\navoiding mistakes.",
                                   style: Theme.of(context).textTheme.headline2,
                                 ),
                                 SizedBox(
                                   height: 20,
                                 ),
-                                Text(
+                                /*Text(
                                   "Collect all types \ndocuments",
                                   style: Theme.of(context).textTheme.headline3,
-                                ),
+                                ),*/
                               ]),
                         ),
                       )
